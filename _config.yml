@@ -7,8 +7,8 @@ title: QxD
 subtitle:
 description:
 author: Icy
-language:zh-Hans
-timezone:
+language: zh-Hans
+timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
