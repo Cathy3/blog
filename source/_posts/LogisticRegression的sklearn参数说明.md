@@ -4,24 +4,30 @@ date: 2018-08-24 16:51:05
 tags:
 ---
 
-*class* sklearn.linear_model.**LogisticRegression**(penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’liblinear’, max_iter=100, multi_class=’ovr’, verbose=0, warm_start=False, n_jobs=1)
 
-在scikit-learn中，主要是基于LogisticRegression模型来解决Logistic回归算法，其中，有两种不同的代价函数(cost function)：
-L1:
-$$\min_{w, c} \|w\|_1 +C\sum_{i=1}^nlog(exp(-y_i(X_{i}^\mathrm{T}w+c))+1)$$
-L2：
-$$\min_{w, c} \frac{1}{2}w^\mathrm{T}w +C\sum_{i=1}^nlog(exp(-y_i(X_{i}^\mathrm{T}w+c))+1)$$
-每个式子中前一项是**正则化项（Regularizer）**（包含w的范数），后一项是**损失函数（loss function）**，参数 **C** 控制了两者在最终的损失函数中所占的比重。
-求解w参数的方法根据L1/L2代价函数的不同，也存在不同的求解拟合参数的方法：
-|Case |Solver|
-|---- | ---|
-|L2 penalty | “saga”,  “liblinear” , “lbfgs”,  “sag”,  “newton-cg”|
-|---- | ---|
-|L1 penalty | “saga”,  “liblinear” |
-|---- | ---|
-|Multinomial loss |“saga”, “lbfgs”,  “sag”,  “newton-cg”|
-|---- | ---|
-|Very Large dataset (n_samples) |“saga”, “sag” |
+
+
+ > *class* sklearn.linear_model.**LogisticRegression**(penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’liblinear’, max_iter=100, multi_class=’ovr’, verbose=0, warm_start=False, n_jobs=1)
+
+
+在scikit-learn中，主要是基于LogisticRegression模型来解决Logistic回归算法，其中，有两种不同的代价函数(cost function)：  
+L1:  
+
+$$ \min _ { w,c }\|w\| _ 1+C\sum _ { i=1 }^n log ( exp ( -y_ i(X _ { i }^ \mathrm { T }w+c))+1)$$
+
+L2：  
+
+$$ \min _{ w, c } \frac { 1 }{ 2 }w^ \mathrm { T }w +C \sum _{ i=1 }^nlog(exp(-y _i (X _{i}^ \mathrm { T }w+c))+1)$$
+
+每个式子中前一项是**正则化项（Regularizer）**（包含w的范数），后一项是**损失函数（loss function）**，参数 **C** 控制了两者在最终的损失函数中所占的比重。  
+求解w参数的方法根据L1/L2代价函数的不同，也存在不同的求解拟合参数的方法：  
+
+| Case | Solver |
+| ---- | --- |
+| L2 penalty | “saga”,  “liblinear” , “lbfgs”,  “sag”,  “newton-cg” |
+| L1 penalty | “saga”,  “liblinear” |
+| Multinomial loss |“saga”, “lbfgs”,  “sag”,  “newton-cg” |
+| Very Large dataset (n_samples) | “saga”, “sag” |
 
  - **penalty：**惩罚项，str类型，可选参数为l1和l2，默认为l2。
      - 用于指定惩罚项中使用的规范。加上约束，使得模型更不会过拟合(overfit)，可以获得泛化能力更强的结果
