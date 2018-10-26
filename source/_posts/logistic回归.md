@@ -15,6 +15,9 @@ Logistic回归是统计学习中的经典分类方法。其实仅在线性回归
 
 $$z=w ^ \mathrm{ T }x+b\tag{1}$$ 是实值，需要转换为 0/1 值才能进行分类。因此找一个单调可微函数来替代，将$z$ 的值映射到 (0,1) 之间，这里采用[logistic函数](https://en.wikipedia.org/wiki/Logistic_function)：
 $$y=\frac{1}{1+e^{-z}}\tag{2}$$
+
+<!-- more -->
+
 ![logistic function](https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Logistic-curve.svg/1200px-Logistic-curve.svg.png)
 从图中可以看出，对数几率函数是一种“Sigmoid函数”，当 $z=0$ 时，函数值为0.5。随着 $z$ 的增大，对应的值将逼近于1；而随着 $z$ 的减小，输出值将逼近于0。如果横坐标刻度足够大，函数将看起来很像一个阶跃函数，其输出值在 $z=0$ 附近变化很陡。
 
