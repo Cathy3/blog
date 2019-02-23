@@ -1,5 +1,5 @@
 ---
-title: 用python刷LeetCode中链表题
+title: 用python刷LeetCode链表题(简单级)
 date: 2019-02-20
 categories: 
 		- Algorithm
@@ -211,9 +211,9 @@ class Solution(object):
 >输入: 1->2->6->3->4->5->6, val = 6
 
 >输出: 1->2->3->4->5
-## 方法：一个指针
+## 方法：dummy node
 - 有了第83题的思路，我们这里可以用一个指针来进行链表的遍历，
-- 但是这里需要注意的是，头节点也需要进行判断，如果头节点的值等于val的话，我们不能返回头节点，所以这里很巧妙的重新生成了一个无关的头节点。
+- 但是这里需要注意的是，头节点也需要进行判断，如果头节点的值等于val的话，我们不能返回头节点，所以这里很巧妙的重新生成了一个无关的头节点dummy node。
 ```python
 class Solution(object):
     def removeElements(self, head, val):
