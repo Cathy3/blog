@@ -4,9 +4,9 @@ date: 2019-02-20
 categories: 
 		- Algorithm
 tags:  
-        - python  
+        - python
         - LeetCode
-		- 数组
+        - 数组
 ---
 # 1. 两数之和
 [Two Sum](https://leetcode-cn.com/problems/two-sum/)
@@ -22,6 +22,7 @@ tags:
 > 因为 nums[0] + nums[1] = 2 + 7 = 9
 
 > 所以返回 [0, 1]
+
 ## 方法：字典
 利用python中的字典记录记录下每个元素出现的位置
 
@@ -133,6 +134,7 @@ class Solution(object):
 >注意这五个元素可为任意顺序。
 
 >你不需要考虑数组中超出新长度后面的元素。
+
 ## 方法：遍历一次
 ```python
 class Solution(object):
@@ -234,8 +236,9 @@ class Solution(object):
     - 如果 max_ending_here < 0 的话，说明此前的和是负的，需要舍弃，所以将 max_ending_here 的值变为 i。
     - 反之，表明当前的和还是正值， 将 max_ending_here 的值变为 i + max_ending_here,可以继续向前探索。
     - max_so_far 和 max_ending_here 比较，取较大值。
- ```python
- class Solution(object):
+
+```python
+class Solution(object):
     def maxSubArray(self, nums):
         """
         :type nums: List[int]
@@ -378,11 +381,13 @@ class Solution(object):
 ```
 ## 方法
 每一行前补0，后补0，相加求和即为下一行的数。
-```
-  1 3 3 1 0 
-+ 0 1 3 3 1
-= 1 4 6 4 1
-```
+
+>   1 3 3 1 0 
+
+> \+ 0 1 3 3 1
+
+> = 1 4 6 4 1
+
 ```python
 class Solution(object):
     def generate(self, numRows):
@@ -447,6 +452,7 @@ class Solution(object):
 > 输入: [7,6,4,3,1]
 > 输出: 0
 > 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
 ## 方法一：遍历
 根据题意，我们只需要找出数组中最大的差值即可，即 `max(prices[j] – prices[i]) ，i < j` 。
 如何得到最大的差值，只需要一次遍历即可，在遍历的用一个变量记录遍历到当前时的最小值即可。时间复杂度为 $O(n)$.

@@ -4,9 +4,9 @@ date: 2019-02-20
 categories: 
 		- Algorithm
 tags:  
-		- python
+        - python
         - LeetCode
-		- 链表
+        - 链表
 ---
 # 21. 合并两个有序链表
 [Merge Two Sorted Lists](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
@@ -242,7 +242,9 @@ class Solution(object):
 
 >输出: 5->4->3->2->1->NULL
 ## 方法：两个指针，头插法
-用两个指针，p指针记录的是每次的队头元素，q指针指向下一个要插入队头的元素。
+- 用两个指针，p指针记录的是每次的队头元素，q指针指向下一个要插入队头的元素。
+- head帮忙指向下轮要头插的元素，待本轮指针翻转完之后要把该元素赋给q
+
 ```python
 class Solution(object):
     def reverseList(self, head):
@@ -256,7 +258,7 @@ class Solution(object):
         q = head.next  # q是指下一个要插入队头的元素
         while q:
             head.next = q.next # 保留后一个要插入的元素地址
-            q.next = p # 反转，next为队头元素
+            q.next = p # 指针反转，next为队头元素
             p = q #q插入，作为新的队头
             q = head.next # 重新指定下一个要插入队头的元素
         return p
