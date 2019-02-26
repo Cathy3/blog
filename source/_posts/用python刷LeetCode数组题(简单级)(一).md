@@ -4,14 +4,14 @@ date: 2019-02-20
 categories: 
 		- Algorithm
 tags:  
-		- python
+        - python  
         - LeetCode
 		- 数组
 ---
 # 1. 两数之和
 [Two Sum](https://leetcode-cn.com/problems/two-sum/)
 ## 题目描述
-给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那**两个**整数，并返回他们的数组下标。
 
 你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
 
@@ -227,6 +227,7 @@ class Solution(object):
 > 输出: 6
 
 > 解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+
 ## 方法：Kadane's algorithm
 - 用两个指针：max_so_far 指针记录此前所有碰到的最大和，max_ending_here 指针记录循环到当前元素的最大和。
 - 当循环到元素i时，
@@ -276,6 +277,7 @@ class Solution(object):
 > 输出: [4,3,2,2]
 
 > 解释: 输入数组表示数字 4321。
+
 ## 方法一：反过来遍历
 从最后一位，找一个记录当前进位的变量，然后遍历一遍数组
 ```python
@@ -364,6 +366,7 @@ class Solution(object):
 > 输入: 5
 
 > 输出:
+
 ```
 [
      [1],
@@ -394,6 +397,181 @@ class Solution(object):
         for i in range(1, numRows):
             res.append(map(lambda x,y:x+y, res[-1]+[0], [0]+res[-1]))
         return res
+```
+# 119. 杨辉三角 II
+[Pascal's Triangle II](https://leetcode-cn.com/problems/pascals-triangle-ii/)
+
+## 题目描述
+给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
+
+在杨辉三角中，每个数是它左上方和右上方的数的和。
+
+**示例:**
+
+> 输入: 3
+> 输出: [1,3,3,1]
+
+## 方法
+思路同上一题
+```python
+class Solution(object):
+    def getRow(self, rowIndex):
+        """
+        :type rowIndex: int
+        :rtype: List[int]
+        """
+        res = [1]
+        for i in range(1, rowIndex+1):
+            res = list(map(lambda x,y:x+y, res+[0], [0]+res))
+        return res
+```
+
+# 121. 买卖股票的最佳时机
+[Best Time to Buy and Sell Stock](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+## 题目描述
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+如果你最多只允许完成一笔交易（即买入和卖出一支股票），设计一个算法来计算你所能获取的最大利润。
+
+注意你不能在买入股票前卖出股票。
+
+**示例 1:**
+
+> 输入: [7,1,5,3,6,4]
+> 输出: 5
+> 解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格。
+
+**示例 2:**
+
+> 输入: [7,6,4,3,1]
+> 输出: 0
+> 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+## 方法一：遍历
+根据题意，我们只需要找出数组中最大的差值即可，即 `max(prices[j] – prices[i]) ，i < j` 。
+如何得到最大的差值，只需要一次遍历即可，在遍历的用一个变量记录遍历到当前时的最小值即可。时间复杂度为 $O(n)$.
+```python
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        if prices is None or len(prices)<2:
+            return 0
+        
+        buy = prices[0] # 买入
+        profit = 0 # 利润
+        
+        for i in range(1,len(prices)):
+            if prices[i] < buy:
+                buy = prices[i]
+            else:
+                if prices[i] - buy > profit:
+                    profit = prices[i] - buy
+        return profit
+```
+
+## 方法二：Kadane's algorithm
+- 方法同上面的53题-求数组中和最大的连续子数组序列。
+- 如何转化为求数组中的和最大的连续子序列？相邻两个数作差即可，这样的话子序列的和就是我们在子序列开始卖出股票，在子序列最后买回股票所能得到的收益。
+```python
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        
+        max_so_far = max_ending_here = 0
+        
+        for i in range(1, len(prices)):
+            max_ending_here = max(0, max_ending_here + prices[i] - prices[i-1])
+            max_so_far = max(max_so_far, max_ending_here)
+        return max_so_far
+```
+测试结果比前一个方法慢
+
+# 122. 买卖股票的最佳时机 II
+[Best Time to Buy and Sell Stock II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
+## 题目描述
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+**示例 1:**
+
+输入: [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+**示例 2:**
+
+输入: [1,2,3,4,5]
+输出: 4
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+**示例 3:**
+
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+## 方法：遍历
+如果后面的股价比前面的大，我们就买卖
+```python
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        return sum(max(prices[i+1]-prices[i], 0) for i in range(len(prices)-1))
+```
+
+# 167. 两数之和 II - 输入有序数组
+
+## 题目描述
+给定一个已按照升序排列 的有序数组，找到两个数使得它们相加之和等于目标数。
+
+函数应该返回这两个下标值 index1 和 index2，其中 index1 必须小于 index2。
+
+说明:
+
+返回的下标值（index1 和 index2）不是从零开始的。
+你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。
+
+**示例:**
+
+> 输入: numbers = [2, 7, 11, 15], target = 9
+
+>输出: [1,2]
+
+>解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
+
+## 方法
+思路同第1题
+```python
+class Solution(object):
+    def twoSum(self, numbers, target):
+        """
+        :type numbers: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        dic = dict()
+        
+        for index, value in enumerate(numbers):
+            sub = target - value
+            if sub in dic:
+                return (dic[sub]+1, index+1)
+            else:
+                dic[value] = index
 ```
 
 # 参考
