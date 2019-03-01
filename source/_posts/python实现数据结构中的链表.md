@@ -12,13 +12,13 @@ tags:
 
 # 实现单链表
 ```python
-class Node:
-    def __init__(self, x):
+class Node: # 链表的结点
+    def __init__(self, x, next_=None):
         self.val = x
-        self.next = None
+        self.next = next_
 
-class SingleLinkList:
-    def __init__(self):
+class SingleLinkList: # 单链表
+    def __init__(self): # 空表
         self.head = None
     
     #增
@@ -38,12 +38,24 @@ class SingleLinkList:
         cur.next = node
     
     #删
-    def remove(self, p):#初除位置p处的节点，返回其数值
-        x = p.val
+    def remove(self, p):#删除在位置p处的结点，返回其数值
         k = self.head
         for i in range(p-1):
             k = k.next
+        x = k.next.val
         k.next = k.next.next
+        return x
+    
+    def remove_last(self): #删除表尾的结点
+        p = self.head
+        if p.next is None:
+            x = p.val
+            self.head = None
+            return x
+        while p.next.next is not None:  # 直到 p.next 是最后结点
+            p = p.next
+        x = p.next.val
+        p.next = None
         return x
 
     def show(self):
@@ -59,11 +71,89 @@ if __name__ == '__main__':
     for i in range(10):
         l.insertAsLast(i)
     l.show()
+    l.remove_last()
+    l.show()
 ```
 输出：
 ```
 0 --> 1 --> 2 --> 3 --> 4 --> 5 --> 6 --> 7 --> 8 --> 9 --> 
 ```
+# 双向链表
+
+```python
+class DLNode: # 链表的结点
+    def __init__(self, x, prev=None, next_=None):
+        self.val = x
+        self.next = next_
+        self.prev = prev
+
+class DoubleLinkList: # 双链表
+    def __init__(self): # 空表
+        self.head = None
+    
+    #增
+    def insertAsFirst(self, x): #x在首位插入               
+        if not self.head:
+            self.head = DLNode(x)
+        else:
+            node = DLNode(x,None,self.head)
+            self.head.prev = node 
+            self.head = node   # node 作为新的头结点
+            
+    def insertAsLast(self, x): #x在尾部插入
+        if not self.head:
+            self.head = DLNode(x)
+        else:
+            cur = self.head
+            while cur.next != None: # 移动到链表尾部
+                cur = cur.next
+            node = DLNode(x)
+            cur.next = node
+            node.prev = cur
+    
+    #删
+    def remove(self, p):#删除在位置p处的结点，返回其数值
+        k = self.head
+        for i in range(p-1):
+            k = k.next
+        x = k.next.val
+        k.next = k.next.next
+        k.next.prev = k
+        return x
+    
+
+    def show(self):
+        cur = self.head
+        while cur != None:
+            # cur是一个有效的节点
+            print(cur.val, end=' -- ')
+            cur = cur.next
+        print()
+    def show_reverse(self):
+        cur = self.head
+        while cur.next != None:
+            cur = cur.next
+        while cur != None:
+            print(cur.val, end=' -- ')
+            cur = cur.prev
+        print()    
+    
+if __name__ == '__main__':
+    l = DoubleLinkList()
+    for i in range(10):
+        l.insertAsLast(i)
+    l.show()
+    l.remove(2)
+    l.show()
+    l.show_reverse()
+```
+输出：
+```
+0 -- 1 -- 2 -- 3 -- 4 -- 5 -- 6 -- 7 -- 8 -- 9 -- 
+0 -- 1 -- 3 -- 4 -- 5 -- 6 -- 7 -- 8 -- 9 -- 
+9 -- 8 -- 7 -- 6 -- 5 -- 4 -- 3 -- 1 -- 0 --
+```
+
 
 # Leetcode习题 
 ## 206. 反转链表
