@@ -157,16 +157,14 @@ if __name__ == '__main__':
 ```
 # LeetCode 习题
 
+## 有效的括号
+[Valid Parentheses](https://leetcode-cn.com/problems/valid-parentheses/)
 
-Valid Parentheses（有效的括号）
-英文版：https://leetcode.com/problems/valid-parentheses/
-中文版：https://leetcode-cn.com/problems/valid-parentheses/
-Longest Valid Parentheses（最长有效的括号）
-英文版：https://leetcode.com/problems/longest-valid-parentheses/
-中文版：https://leetcode-cn.com/problems/longest-valid-parentheses/
-Evaluate Reverse Polish Notatio（逆波兰表达式求值）
-英文版：https://leetcode.com/problems/evaluate-reverse-polish-notation/
-中文版：https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/
+## 最长有效的括号
+[Longest Valid Parentheses](https://leetcode-cn.com/problems/longest-valid-parentheses/)
+
+## 逆波兰表达式求值
+[Evaluate Reverse Polish Notatio](https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/)
 
 # 参考
 - [problem-solving-with-algorithms-and-data-structure-using-python](https://facert.gitbooks.io/python-data-structure-cn/content/)

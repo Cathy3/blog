@@ -35,8 +35,7 @@ $F_10 = 55$.
 0 1 1 2 3 5 8 13 
 
 ## Naive Algorithm
-
-
+递归
 ```python
 def calc_fib(n):
     if (n <= 1):
@@ -437,7 +436,7 @@ print(fibonacci_sum_naive(240))
 $$a_n= 
 	\begin{cases}
 	a_{n-1}+a_{n-2},\\
-	1,&n\leq 1
+	1,& {n\leq 1}
 	\end{cases}
 $$   
 

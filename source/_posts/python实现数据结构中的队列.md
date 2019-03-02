@@ -90,11 +90,54 @@ if __name__ == '__main__':
 ```
 
 # 实现一个循环队列
+队头变量`_head`记录当前队列的第一个元素位置
+```python
+class QueueUnderflow(ValueError):# 空队列无法 dequeue
+    pass
 
+class SQueue:
+    def __init__(self, init_len=8):
+        self._elems = [0]*init_len  # 队列元素
+        self._head = 0 # 队列首元素位置的下标
+        self._num = 0  # 表中元素个数
+        self._len = init_len   # 当前表的长度，表满了的话，要换一个存储表
+    def peek(self):
+        if self._num == 0: # 队空状态
+            raise QueueUnderflow
+        return self._elems[self._head]
+    def dequeue(self):
+        if self._num == 0:  # 队空状态
+            raise QueueUnderflow
+        e = self._elems[self._head]
+        self._head = (self._head+1) % self._len 
+        self._num -= 1
+        return e
+    def enqueue(self, e):
+        if self._num == self._len: # 队满状态
+            self.__extend() # 扩大存储区
+        # 新元素的入队位置
+        self._elems[(self._head + self._num) % self._len]=e
+        self._num += 1
+    def __extend(self):  # 扩容
+        old_len = self._len
+        self._len *= 2
+        new_elems = [0] * self._len
+        for i in range(old_len):
+            new_elems[i] = self._elems[(self._head + i)%old_len]
+        self._elems, self._head = new_elems, 0
+        
+if __name__ == '__main__':
+    l = SQueue()
+    for i in range(10):
+        l.enqueue(i+1)
+    print(l.peek())
+    l.dequeue()
+    print(l.peek())
+```
 # LeetCode习题
-Design Circular Deque（设计一个双端队列）
-英文版：https://leetcode.com/problems/design-circular-deque/
-中文版：https://leetcode-cn.com/problems/design-circular-deque/
-Sliding Window Maximum（滑动窗口最大值）
-英文版：https://leetcode.com/problems/sliding-window-maximum/
-中文版：https://leetcode-cn.com/problems/sliding-window-maximum/
+
+## 设计一个双端队列
+[Design Circular Deque](https://leetcode-cn.com/problems/design-circular-deque/)
+
+## 滑动窗口最大值
+[Sliding Window Maximum](https://leetcode-cn.com/problems/sliding-window-maximum/)
