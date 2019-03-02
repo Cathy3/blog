@@ -16,6 +16,8 @@ list表头入队，表尾出队。反过来也可以。
 - enqueue 入队，要把表中其余元素全部后移，再插入首元素，需要 $O(n)$时间
 - dequeue 出队,$O(1)$
 
+<!-- more -->
+
 ```python
 class Queue:
     def __init__(self):
