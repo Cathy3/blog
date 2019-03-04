@@ -5,7 +5,8 @@ categories:
 		- Algorithm
 tags:  
 		- python
-		- Algorithm		
+        - Algorithm		
+mathjax: true
 ---
 
 

@@ -1,7 +1,12 @@
 ---
 title: LogisticRegression的sklearn参数说明
 date: 2018-08-24 16:51:05
+categories: 
+		- 机器学习
 tags:
+        - 逻辑回归
+        - sklearn
+mathjax: true
 ---
 
 

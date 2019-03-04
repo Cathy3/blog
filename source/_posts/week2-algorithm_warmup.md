@@ -6,7 +6,8 @@ categories:
 tags:  
 		- python
 		- Algorithm
-		- Fibonacci
+        - Fibonacci
+mathjax: true
 ---
 
  - Estimate the running time of an algorithm

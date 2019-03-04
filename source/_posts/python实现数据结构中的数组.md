@@ -214,4 +214,4 @@ class Solution(object):
 
 # 参考
 - [mplementation of Dynamic Array in Python](https://www.geeksforgeeks.org/implementation-of-dynamic-array-in-python/)
--[任务1-数组与链表](https://note.youdao.com/ynoteshare1/index.html?id=6b47b08c91b05db6c33fe92b88b53192&type=note#/)
+- [任务1-数组与链表](https://note.youdao.com/ynoteshare1/index.html?id=6b47b08c91b05db6c33fe92b88b53192&type=note#/)

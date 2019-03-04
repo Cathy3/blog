@@ -457,7 +457,7 @@ class Solution(object):
 
 ## 方法一：遍历
 根据题意，我们只需要找出数组中最大的差值即可，即 `max(prices[j] – prices[i]) ，i < j` 。
-如何得到最大的差值，只需要一次遍历即可，在遍历的用一个变量记录遍历到当前时的最小值即可。时间复杂度为 $O(n)$.
+如何得到最大的差值，只需要一次遍历即可，在遍历的用一个变量记录遍历到当前时的最小值即可。时间复杂度为 `O(n)`.
 ```python
 class Solution(object):
     def maxProfit(self, prices):
