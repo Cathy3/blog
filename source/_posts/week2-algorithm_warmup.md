@@ -19,6 +19,8 @@ mathjax: true
 ## 斐波那契数列
 **Task.** Given an integer $n$,  find the last digit of the nth Fibonacci number $F_n$.
 
+<!-- more -->
+
 **Input Format.** The input consists of a single integer $n$.
 
 **Constraints.** $0 ≤ n ≤ 45 $.
@@ -32,7 +34,8 @@ Input:
 Output:
 55
 ```
-$F_10 = 55$.
+$F_{10} = 55$
+
 0 1 1 2 3 5 8 13 
 
 ## Naive Algorithm

@@ -16,6 +16,8 @@ tags:
 如果各个迭代器的元素个数不一致，则返回列表长度与最短的对象相同，利用 * 号操作符，可以将元组解压为列表。
 
 
+<!-- more -->
+
 **语法 :**
 
     zip(*iterables)
@@ -139,7 +141,6 @@ print(a)
 
 
 ## 例3 在lambda中嵌套逻辑
-<!-- more -->
 可以使用if/else三元表达式，或者对等的但需要些技巧的and/or组合。正如我们前面所了解到的，如下语句：
 ```
 if a:
@@ -257,8 +258,8 @@ print(test)
 
 
 # 参考
-- [Python zip() - programiz](https://www.programiz.com/python-programming/methods/built-in/zip)
-- [Python3 zip() 函数 | 菜鸟教程](http://www.runoob.com/python3/python3-func-zip.html)
-- [lambda表达式 - python进阶](https://eastlakeside.gitbooks.io/interpy-zh/content/Lambdas/)
-- [Python3之lambda匿名函数详解-Professor哥-51CTO博客](http://blog.51cto.com/professor/1745109)
-- [Python map() function - GeeksforGeeks](https://www.geeksforgeeks.org/python-map-function/)
+-   [Python zip() - programiz](https://www.programiz.com/python-programming/methods/built-in/zip)
+-   [Python3 zip() 函数 | 菜鸟教程](http://www.runoob.com/python3/python3-func-zip.html)
+-   [lambda表达式 - python进阶](https://eastlakeside.gitbooks.io/interpy-zh/content/Lambdas/)
+-   [Python3之lambda匿名函数详解-Professor哥-51CTO博客](http://blog.51cto.com/professor/1745109)
+-   [Python map() function - GeeksforGeeks](https://www.geeksforgeeks.org/python-map-function/)

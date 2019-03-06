@@ -14,10 +14,11 @@ tags:
 递归结构中，递归的部分必须比原来的整体简单，才有可能到达某种终结点(出口)。而且必须存在非递归的基本结构构成的部分，否则会无限递归。
 
 学习目标：
-- 编程实现斐波那契数列求值 f(n)=f(n-1)+f(n-2)
-- 编程实现求阶乘 n!
-- 编程实现一组数据集合的全排列
-- LeetCode 70. 爬楼梯
+
+-   编程实现斐波那契数列求值 f(n)=f(n-1)+f(n-2)
+-   编程实现求阶乘 n!
+-   编程实现一组数据集合的全排列
+-   LeetCode 70. 爬楼梯
 
 以上问题都可以用递归来解决。
 
@@ -54,6 +55,7 @@ print(a)
 
 # LeetCode 46. 全排列
 [Permutations](https://leetcode-cn.com/problems/permutations/)
+
 给定一个**没有重复**数字的序列，返回其所有可能的全排列。
 
 **示例**
@@ -88,6 +90,7 @@ class Solution:
 ```
 # LeetCode 47. 全排列 II
 [Permutations II](https://leetcode-cn.com/problems/permutations-ii/)
+
 给定一个可包含重复数字的序列，返回所有不重复的全排列。
 
 **示例:**

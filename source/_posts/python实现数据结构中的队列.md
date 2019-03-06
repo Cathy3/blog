@@ -17,11 +17,11 @@ mathjax: true
 “先来的数据先处理”是一种很常见的思路，所以队列的应用范围非常广泛。比如广度优先搜索算法，通常就会从搜索候补中选择最早的数据作为下一个顶点。此时，在候补顶点的管理上就可以使用队列。
 
 学习目标：
-- 用数组实现一个顺序队列
-- 用链表实现一个链式队列
-- 实现一个循环队列
-- LeetCode 641. 设计循环双端队列
-- LeetCode 239. 滑动窗口最大值
+-   用数组实现一个顺序队列
+-   用链表实现一个链式队列
+-   实现一个循环队列
+-   LeetCode 641. 设计循环双端队列
+-   LeetCode 239. 滑动窗口最大值
 
 <!-- more -->
 
@@ -158,15 +158,15 @@ if __name__ == '__main__':
 设计实现双端队列。
 你的实现需要支持以下操作：
 
-- MyCircularDeque(k)：构造函数,双端队列的大小为k。
-- insertFront()：将一个元素添加到双端队列头部。 如果操作成功返回 true。
-- insertLast()：将一个元素添加到双端队列尾部。如果操作成功返回 true。
-- deleteFront()：从双端队列头部删除一个元素。 如果操作成功返回 true。
-- deleteLast()：从双端队列尾部删除一个元素。如果操作成功返回 true。
-- getFront()：从双端队列头部获得一个元素。如果双端队列为空，返回 -1。
-- getRear()：获得双端队列的最后一个元素。 如果双端队列为空，返回 -1。
-- isEmpty()：检查双端队列是否为空。
-- isFull()：检查双端队列是否满了。
+-   MyCircularDeque(k)：构造函数,双端队列的大小为k。
+-   insertFront()：将一个元素添加到双端队列头部。 如果操作成功返回 true。
+-   insertLast()：将一个元素添加到双端队列尾部。如果操作成功返回 true。
+-   deleteFront()：从双端队列头部删除一个元素。 如果操作成功返回 true。
+-   deleteLast()：从双端队列尾部删除一个元素。如果操作成功返回 true。
+-   getFront()：从双端队列头部获得一个元素。如果双端队列为空，返回 -1。
+-   getRear()：获得双端队列的最后一个元素。 如果双端队列为空，返回 -1。
+-   isEmpty()：检查双端队列是否为空。
+-   isFull()：检查双端队列是否满了。
 
 示例：
 ```
@@ -185,9 +185,9 @@ circularDeque.getFront();				// 返回 4
 
 提示：
 
-- 所有值的范围为 [1, 1000]
-- 操作次数的范围为 [1, 1000]
-- 请不要使用内置的双端队列库。
+-   所有值的范围为 [1, 1000]
+-   操作次数的范围为 [1, 1000]
+-   请不要使用内置的双端队列库。
 
 ## 方法
 和上一题思路相同，用一个list实现类似的环形列表。
@@ -321,5 +321,5 @@ class Solution:
 ```
 
 # 参考
-- 《我的第一本算法书》
-- [[LeetCode]Sliding Window Maximum ](http://bookshadow.com/weblog/2015/07/18/leetcode-sliding-window-maximum/)
+-   《我的第一本算法书》
+-   [[LeetCode]Sliding Window Maximum ](http://bookshadow.com/weblog/2015/07/18/leetcode-sliding-window-maximum/)
