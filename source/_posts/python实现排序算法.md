@@ -13,11 +13,9 @@ mathjax: true
 学习目标：
 
 -   实现归并排序、快速排序、插入排序、冒泡排序、选择排序、堆排序
--   编程实现 O(n) 时间复杂度内找到一组数据的第 K 大元素
--   二分查找
-    -   实现一个有序数组的二分查找算法
-    -   实现模糊二分查找算法（比如大于等于给定值的第一个元素）
--   LeetCode 69. x 的平方根
+-   LeetCode 215. 数组中的第K个最大元素
+
+<!-- more -->
 
 # 插入排序
 每次假设前面的元素都是已经排好序了的，然后将当前位置的元素插入到前面已排好序的序列中。
@@ -329,44 +327,6 @@ class Solution:
         if k > len(nums) - len(nums2):
             return self.findKthLargest(nums2, k - (len(nums) - len(nums2)))
         return pivot
-```
-
-# LeetCode 69. x 的平方根
-实现 int sqrt(int x) 函数。
-
-计算并返回 x 的平方根，其中 x 是非负整数。
-
-由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
-
-示例 1:
-```
-输入: 4
-输出: 2
-```
-示例 2:
-```
-输入: 8
-输出: 2
-说明: 8 的平方根是 2.82842..., 
-     由于返回类型是整数，小数部分将被舍去。
-```
-## 方法：二分查找
-
-```python
-class Solution:
-    def mySqrt(self, x: int) -> int:
-        left = 0
-        right = x
-        
-        while left <= right:
-            mid = (left+right)//2
-            if mid * mid < x:
-                left = mid + 1
-            elif mid * mid > x:
-                right = mid -1
-            else:
-                return mid
-        return left -1
 ```
 
 # 参考
