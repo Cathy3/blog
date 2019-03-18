@@ -159,6 +159,7 @@ class Solution:
         return self.climbStairs(n-1) + self.climbStairs(n-2)
 ```
 这个方法运行正常，但是因为超出时间限制，未能通过。
+
 ## 方法：动态规划
 动态规划来记录历史数据。
 ```python

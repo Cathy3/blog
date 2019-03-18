@@ -22,9 +22,9 @@ mathjax: true
 4. 把子问题的解局部最优解合成原来解问题的一个解。
 
 注意：
-- 贪心算法与动态规划的不同在于它对每个子问题的解决方案都做出选择，不能回退。动态规划则会保存以前的运算结果，并根据以前的结果对当前进行选择，有回退功能。
-- 贪心法可以解决一些最优化问题，如：求图中的最小生成树、求哈夫曼编码……
-- 对于大部分的问题，贪心法通常都不能找出最佳解（不过也有例外），因为他们一般没有测试所有可能的解。贪心法容易过早做决定，因而没法达到最佳解。例如，所有对图着色问题。
+-   贪心算法与动态规划的不同在于它对每个子问题的解决方案都做出选择，不能回退。动态规划则会保存以前的运算结果，并根据以前的结果对当前进行选择，有回退功能。
+-   贪心法可以解决一些最优化问题，如：求图中的最小生成树、求哈夫曼编码……
+-   对于大部分的问题，贪心法通常都不能找出最佳解（不过也有例外），因为他们一般没有测试所有可能的解。贪心法容易过早做决定，因而没法达到最佳解。例如，所有对图着色问题。
 
 <!-- more -->
 
@@ -36,23 +36,23 @@ mathjax: true
  - Create a program for maximizing the number of prize places in a competition
 
 1. Apply greedy strategy to solve various computational problems. This will usually require you to design
-an algorithm that repeatedly makes the most proftable move to construct a solution. You will then
+an algorithm that repeatedly makes the most profitable move to construct a solution. You will then
 need to show that the moves of your algorithm are safe, meaning that they are consistent with at least
 one optimal solution.
-2. Design and implement an efcient greedy algorithm for the following problems:
+2. Design and implement an eficient greedy algorithm for the following problems:
 (a) changing money with a minimum number of coins;
 (b) maximizing the total value of a loot;
 (c) maximizing revenue in online ad placement;
 (d) minimizing work while collecting signatures;
 (e) maximizing the number of prize places in a competition;
-(f) fnally, maximizing your salary!
+(f) finally, maximizing your salary!
 
 # 兑换零钱(Money Change)
 **Task.** 根据输入值，找到需要兑换 1, 5, 10面额硬币的最少个数.
 
 **Input Format.** 输入一个整数$m$.
 
-**Constraints.** $1 ≤ n ≤ 10^3 $.
+**Constraints.** $1 ≤ n ≤ 10^3$.
 
 **Output Format.** Output the minimum number of coins with denominations 1, 5, 10 that changes $m$.
 
@@ -117,9 +117,10 @@ print(get_changeC(999))
 
 **Input Format.** 输入包可承受的重量(capacity)$W$，$n$件掠夺品的重量weights和价值values分别是$w_i,v_i$
 
-**Constraints.** $1 ≤ n ≤ 10^3, 0 ≤W≤ 2·10^6, 0 ≤v_i≤ 2·10^6, 0 ≤w_i≤ 2·10^6 $.所有数字都是整数.
+**Constraints.**  $1 ≤ n ≤ 10^3, 0 ≤W≤ 2·10^6, 0 ≤v_i≤ 2·10^6, 0 ≤ w_i ≤ 2·10^6$ 
+所有数字都是整数.
 
-**Output Format.** Output the maximal value of fractions of items that ft into the knapsack.
+**Output Format.** Output the maximal value of fractions of items that fit into the knapsack.
 
 **Sample 1.**
 ```
@@ -129,8 +130,8 @@ Output:
 180.0000
 ```
 选了第1件和第3件东西。
-## 方法一
 
+## 方法一
 
 ```python
 def get_optimal_value(capacity, weights, values):
@@ -164,7 +165,7 @@ print("{:.10f}".format(get_optimal_value(50, [20,50,30], [60,100,120])))
     180.0000000000
 
 
-## 方法二Optimization
+## 方法二 Optimization
 首先按降序将 $\frac{v}{w}$ 排序
 
 
@@ -208,7 +209,7 @@ total revenue.
 
 **Input Format.** 给定两组序列$a_1,a_2,...,a_n$($a_i$ 是第 $i$ 条广告的点击利润)，$b_1,b_2,...,b_n$($b_i$ 是第 $i$ 个位置的平均每天点击数)，把它们对应分成$n$组$(a_i,b_j)$使他们乘积的总和最大。
 
-**Constraints.** $1 ≤ n ≤ 10^3, -10^5 ≤a_i,b_i≤ 10^5
+**Constraints.** $1 ≤ n ≤ 10^3, -10^5 ≤a_i,b_i≤ 10^5$
 
 
 **Output Format.** 输出 $\sum^n_{i=1}a_ic_i$ 的最大值。$c_1,c_2,...,c_n$是$b_1,b_2,...,b_n$的重排列
@@ -252,7 +253,7 @@ possible.Your goal is to mark as few points on a line as possible so that each s
 
 **Input Format.** $n$段时间 $\{[a_0,b_0],[a_1,b_1],...,[a_{n-1},b_{n-1}]\}$
 
-**Constraints.** $1 ≤ n ≤ 100, -0≤a_i ≤b_i≤ 10^9
+**Constraints.**  $1 ≤ n ≤ 100, -0≤a_i ≤b_i≤ 10^9$
 
 **Output Format.** 标记的位置点
 
@@ -369,7 +370,7 @@ print("\n")
     
 
 
-这里设置<=n 而不是<n 是要考虑要奖品数为2的情况，必须把之前的1退回去。
+这里设置`<=n` 而不是`<n` 是要考虑要奖品数为2的情况，必须把之前的1退回去。
 
 # 最大薪水
 Maximum Salary
