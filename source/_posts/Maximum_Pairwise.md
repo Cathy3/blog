@@ -2,10 +2,10 @@
 title: Maximum Pairwise Product Problem
 date: 2018-09-25
 categories: 
-		- Algorithm
+		-   Algorithm
 tags:  
-		- python
-        - Algorithm		
+		-   python
+        -   Algorithm		
 mathjax: true
 ---
 
@@ -30,6 +30,7 @@ Output:
 <!-- more -->
 
 这个问题其实就是要找到列表中最大的两个数。
+
 # Naive Algorithm
 
 

@@ -26,14 +26,14 @@ mathjax: true
 -   贪心法可以解决一些最优化问题，如：求图中的最小生成树、求哈夫曼编码……
 -   对于大部分的问题，贪心法通常都不能找出最佳解（不过也有例外），因为他们一般没有测试所有可能的解。贪心法容易过早做决定，因而没法达到最佳解。例如，所有对图着色问题。
 
-<!-- more -->
-
 ## 学习目标
  - Practice implementing greedy solutions
  - Build greedy algorithms
  - Create a program for changing money optimally
  - Create a program for maximizing the value of a loot
  - Create a program for maximizing the number of prize places in a competition
+
+<!-- more -->
 
 1. Apply greedy strategy to solve various computational problems. This will usually require you to design
 an algorithm that repeatedly makes the most profitable move to construct a solution. You will then
@@ -327,18 +327,18 @@ Output:
 ```python
 def optimal_summands(n):
     summands = [1]   #被加数
-    n -= 1
+    n -= 1 # 剩余糖果数
     while n:
         last_element = summands[-1] 
         # Save move: check whether the incremented last element can be used as
         # the next summand.
         if (last_element + 1) * 2 <= n: # 如果最后一个数比n的一半还小
             n -= last_element + 1
-            summands.append(last_element + 1)
+            summands.append(last_element + 1) # 添加获奖名额及获奖数
         else:
             if last_element >= n:   # 如果最后一个数大于n
                 n += summands.pop()
-            summands.append(n)
+            summands.append(n) # 添加获奖名额及获奖数
             n = 0    
     return summands
 
@@ -375,7 +375,7 @@ print("\n")
 # 最大薪水
 Maximum Salary
 
-**Task.**  As the last question of a successful interview, your boss gives you a few pieces of paper with numbers on it and asks you to compose a largest number from these numbers. The resulting number is going to be your salary, so you are very much interested in maximizing this number. How can you do this?不同的数拼成一个最大数(这些数未必只是一位数。比如23和3，应该拼成323最大)
+**Task.**  As the last question of a successful interview, your boss gives you a few pieces of paper with numbers on it and asks you to compose a largest number from these numbers. The resulting number is going to be your salary, so you are very much interested in maximizing this number. How can you do this?不同的数拼成一个最大数(这些数未必只是一位数。(比如23和3，应该拼成323最大)
 
 **Input Format.** $n$个数 $a_0,a_1,...,a_n$
 

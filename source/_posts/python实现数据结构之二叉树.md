@@ -22,16 +22,129 @@ mathjax: true
 学习目标：
 
 -   实现一个二叉查找树，并且支持插入、删除、查找操作
--   实现查找二叉查找树中某个节点的后继、前驱节点
+    -   LeetCode 108. 将有序数组转换为二叉搜索树
+    -   LeetCode 109. 有序链表转换二叉搜索树
+    -   LeetCode 701. 二叉搜索树中的插入操作
+    -   LeetCode 700. 二叉搜索树中的搜索
+    -   LeetCode 450. 删除二叉搜索树中的结点
+-   实现查找二叉查找树中某个结点的后继、前驱结点
 -   实现二叉树前、中、后序以及按层遍历
--   leetcode上的验证二叉搜索树(98)及
-二叉树   层次遍历(102,107)！（选做）（保留往期第四天任务）
+    -   LeetCode 144. 二叉树的前序遍历
+    -   LeetCode 94. 二叉树的中序遍历
+    -   LeetCode 145. 二叉树的后序遍历
+    -   LeetCode 102. 二叉树的层次遍历
+-   LeetCode 98. 验证二叉搜索树
+-   LeetCode 103. 二叉树的锯齿形层次遍历
+-   LeetCode 226. 翻转二叉树
+-   LeetCode 104. 二叉树的最大深度
+-   LeetCode 112. 路径总和
+ 
+<!-- more -->
 
-226. Invert Binary Tree（翻转二叉树）
+# LeetCode 108. 将有序数组转换为二叉搜索树
 
-104. Maximum Depth of Binary Tree（二叉树的最大深度）
+将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
 
-112. Path Sum（路径总和）
+本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+
+示例:
+```
+给定有序数组: [-10,-3,0,5,9],
+
+一个可能的答案是：[0,-3,9,-10,null,5]，它可以表示下面这个高度平衡二叉搜索树：
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+```
+
+## 方法：递归
+由于要求二叉查找树是平衡的。所以可以选在数组的中间那个数当树根root。
+
+然后这个数左边的数组为左子树，右边的数组为右子树，分别递归产生左右子树就可以了。
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:        
+        length = len(nums)
+        if length == 0:
+            return None
+        if length == 1:
+            return TreeNode(nums[0])
+        middle = (length-1)//2
+        root = TreeNode(nums[middle])
+        root.left = self.sortedArrayToBST(nums[:middle])
+        root.right = self.sortedArrayToBST(nums[middle+1:])
+        return root
+```
+
+# LeetCode 109. 有序链表转换二叉搜索树
+[Convert Sorted List to Binary Search Tree](https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/)
+
+给定一个单链表，其中的元素按升序排序，将其转换为高度平衡的二叉搜索树。
+
+本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+
+示例:
+```
+给定的有序链表： [-10, -3, 0, 5, 9],
+
+一个可能的答案是：[0, -3, 9, -10, null, 5], 它可以表示下面这个高度平衡二叉搜索树：
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+```
+
+## 方法：链表转成数组
+转成数组后，方法同上一题108的解法
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        nums = []
+        while head:
+            nums.append(head.val)
+            head = head.next
+            
+        def sortedArrayToBST(nums):
+            length = len(nums)
+            if length == 0:
+                return None
+            if length == 1:
+                return TreeNode(nums[0])
+            middle = (length-1)//2
+            root = TreeNode(nums[middle])
+            root.left = sortedArrayToBST(nums[:middle])
+            root.right = sortedArrayToBST(nums[middle+1:])
+            return root
+        
+        return sortedArrayToBST(nums)
+```
 
 # LeetCode 701. 二叉搜索树中的插入操作
 [Insert into a Binary Search Tree](https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/)
@@ -70,7 +183,10 @@ mathjax: true
          \
           4
 ```
-# 方法
+
+## 方法
+与根结点比较大小，递归左子树或右子树。
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -97,6 +213,7 @@ class Solution:
 给定二叉搜索树（BST）的根节点和一个值。 你需要在BST中找到节点值等于给定值的节点。 返回以该节点为根的子树。 如果节点不存在，则返回 NULL。
 
 例如，
+
 ```
 给定二叉搜索树:
 
@@ -114,7 +231,10 @@ class Solution:
      / \   
     1   3
 ```
-# 方法
+
+## 方法
+与根结点比较大小，等于则返回，大于小于则 **递归** 左子树或右子树。
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -124,6 +244,31 @@ class Solution:
 #         self.right = None
 
 class Solution:
+#    def sortedArrayToBST(self, nums: [int]) -> TreeNode:
+#        #层序树的列表转为树结构
+#        l=len(nums)
+#        nodeLst = []
+#        for i in range(l):
+#            nodeLst.append(TreeNode(nums[i]))
+#        for i in range(l//2-1):
+#            nodeLst[i].left = nodeLst[2*i+1]
+#            nodeLst[i].right = nodeLst[2*i+2]
+#        nodeLst[l//2-1].left = nodeLst[2*(l//2-1)+1]
+#        if len(nums)%2 == 1:
+#             nodeLst[l//2-2].left = nodeLst[2*(l//2-1)+1]
+#        return nodeLst[0]
+#
+#    def BSTTraversal(self,root): #层序输出树的列表
+#        a = []
+#        L = []
+#        L.append(root)
+#        while L:
+#            if L[0].left is not None:
+#                L.append(L[0].left)  
+#            if L[0].right is not None:
+#                L.append(L[0].right)
+#            a.append(L.pop(0).val)
+#        return a 
     def searchBST(self, root: TreeNode, val: int) -> TreeNode:
         if not root:
             return None
@@ -176,6 +321,10 @@ key = 3
 ```
 
 ## 方法
+1.  递归遍历整个树
+2.  找到这个要删除的结点后，如果只有左孩子，或没有孩子，返回左孩子或空
+3.  如果有右孩子，找右子树的最小值，即待删结点的后继，交换两个值。
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -200,41 +349,321 @@ class Solution:
         root.right = self.deleteNode(root.right, key) # 递归遍历右子树
         return root
 ```
-#
-前驱节点
 
-若一个节点有左子树，那么该节点的前驱节点是其左子树中val值最大的节点（也就是左子树中所谓的rightMostNode）
+# 查找后继节点
+查找二叉查找树中某个节点的前驱节点
 
-若一个节点没有左子树，那么判断该节点和其父节点的关系
+## 思路
+1. 若一个节点有右子树，那么该节点的后继节点是其右子树中val值最小的节点（也就是右子树中所谓的leftMostNode）
 
-2.1 若该节点是其父节点的右边孩子，那么该节点的前驱结点即为其父节点。
+2. 若一个节点没有右子树，那么判断该节点和其父节点的关系
 
-2.2 若该节点是其父节点的左边孩子，那么需要沿着其父亲节点一直向树的顶端寻找，直到找到一个节点P，P节点是其父节点Q的右边孩子，那么Q就是该节点的前驱节点
+    1.  若该节点是其父节点的左边孩子，那么该节点的后继结点即为其父节点
 
-
-后继节点
-
-若一个节点有右子树，那么该节点的后继节点是其右子树中val值最小的节点（也就是右子树中所谓的leftMostNode）
-
-若一个节点没有右子树，那么判断该节点和其父节点的关系
-
-2.1 若该节点是其父节点的左边孩子，那么该节点的后继结点即为其父节点
-
-2.2 若该节点是其父节点的右边孩子，那么需要沿着其父亲节点一直向树的顶端寻找，直到找到一个节点P，P节点是其父节点Q的左边孩子，那么Q就是该节点的后继节点
+    2.  若该节点是其父节点的右边孩子，那么需要沿着其父亲节点一直向树的顶端寻找，直到找到一个节点P，P节点是其父节点Q的左边孩子，那么Q就是该节点的后继节点
 
 ## 方法
 写成递归形式，
 
 -    当根节点值小于等于p节点值，说明p的后继节点一定在右子树中，
-     -   所以对右子节点递归调用此函数，
+     -   所以对右子节点递归调用此函数
 
 -    如果根节点值大于p节点值，那么有可能根节点就是p的后继节点，或者左子树中的某个节点是p的后继节点，
      -    所以先对左子节点递归调用此函数，如果返回空，说明根节点是后继节点，返回即可，如果不为空，则将那个节点返回
-##
-## 中序遍历
+```python
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
 
-中序遍历二叉查找树可得到一个关键字的有序序列，一个无序序列可以通过构造一棵二叉查找树变成一个有序序列，构造树的过程即为对无序序列进行查找的过程。
+class Solution:
+    def sortedArrayToBST(self, nums: [int]) -> TreeNode:
+        #层序树的列表转为树结构
+        l=len(nums)
+        nodeLst = []
+        for i in range(l):
+            nodeLst.append(TreeNode(nums[i]))
+        for i in range(l//2-1):
+            nodeLst[i].left = nodeLst[2*i+1]
+            nodeLst[i].right = nodeLst[2*i+2]
+        nodeLst[l//2-1].left = nodeLst[2*(l//2-1)+1]
+        if len(nums)%2 == 1:
+             nodeLst[l//2-2].left = nodeLst[2*(l//2-1)+1]
+        return nodeLst[0]    
 
+    def searchSuccNode(self, root: TreeNode, key: int) -> TreeNode:
+        if not root:
+            return None
+        if root.val <= key: # 后继在右子树中
+             return self.searchSuccNode(root.right, key)
+        else: # 后继就是该结点，或者在该结点的左子树中。
+            left = self.searchSuccNode(root.left, key)
+            if not left:
+                return root 
+            else: return left
+    
+if __name__ == '__main__':
+    root = [4,2,7,1,3,5]
+    p = 5
+    S = Solution()
+    root = S.sortedArrayToBST(root)
+    
+    r= S.searchSuccNode(root,p) 
+    if not r:
+        print(str(p) + '的后继不存在')
+    else:
+        print(str(p) + '的后继是' + str(r.val)) 
+#输出：5的后继是7
+```
+# 查找前驱结点
+查找二叉查找树中某个节点的前驱节点
+
+## 思路
+1.  若一个节点有左子树，那么该节点的前驱节点是其左子树中val值最大的节点（也就是左子树中所谓的rightMostNode）
+
+2.  若一个节点没有左子树，那么判断该节点和其父节点的关系
+
+    1.  若该节点是其父节点的右边孩子，那么该节点的前驱结点即为其父节点。
+
+    2.  若该节点是其父节点的左边孩子，那么需要沿着其父亲节点一直向树的顶端寻找，直到找到一个节点P，P节点是其父节点Q的右边孩子，那么Q就是该节点的前驱节点
+
+# 方法
+方法和查找后继结点相同。只是左右子树比较相反。
+
+```python
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution:
+    def sortedArrayToBST(self, nums: [int]) -> TreeNode:
+        #层序树的列表转为树结构
+        l=len(nums)
+        nodeLst = []
+        for i in range(l):
+            nodeLst.append(TreeNode(nums[i]))
+        for i in range(l//2-1):
+            nodeLst[i].left = nodeLst[2*i+1]
+            nodeLst[i].right = nodeLst[2*i+2]
+        nodeLst[l//2-1].left = nodeLst[2*(l//2-1)+1]
+        if len(nums)%2 == 1:
+             nodeLst[l//2-2].left = nodeLst[2*(l//2-1)+1]
+        return nodeLst[0]
+    
+    def searchPredecessorNode(self, root: TreeNode, key: int) -> TreeNode:
+        if not root:
+            return None
+        if root.val >= key: # 前驱在左子树中
+             return self.searchPredecessorNode(root.left, key)
+        else: # 后继就是该结点，或者在该结点的左子树中。
+            right = self.searchPredecessorNode(root.right, key)
+            if not right:
+                return root 
+            else: return right
+    
+if __name__ == '__main__':
+    root = [4,2,7,1,3,5]
+    p = 3
+    S = Solution()
+    root = S.sortedArrayToBST(root)
+    
+    r= S.searchPredecessorNode(root,p) 
+    if not r:
+        print(str(p) + '的前驱不存在')
+    else:
+        print(str(p) + '的前驱是' + str(r.val))
+```
+
+# LeetCode 144. 二叉树的前序遍历
+给定一个二叉树，返回它的 前序 遍历。
+
+ 示例:
+```
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [1,2,3]
+```
+
+## 方法一：用栈从上到下遍历
+先右孩子入栈，再左孩子入栈。
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        stack = [root] # 用栈来辅助存储
+        res = []
+        while stack:
+            node = stack.pop() 
+            res.append(node.val)
+            if node.right: stack.append(node.right)
+            if node.left: stack.append(node.left)
+        return res
+```
+
+## 方法二：递归
+
+```python
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        res = []
+        def dfs(root, res):
+            if root:
+                res.append(root.val)
+                dfs(root.left, res)
+                dfs(root.right, res)
+            return res
+        return dfs(root,res)
+```
+
+## 方法三：用栈迭代
+从根节点開始，一直找它的左子树，直到为空，再找右子树。
+```python
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        stack = [] # 用栈来辅助存储
+        res = []
+        cur = root
+        while stack or cur:
+            while cur: #从根节点開始，一直找它的左子树，直到cur为空
+                stack.append(cur) # 栈中存入根节点和左孩子
+                res.append(cur.val)
+                cur = cur.left
+            cur = stack.pop().right #找右子树
+        return res
+```
+
+# LeetCode 94. 二叉树的中序遍历
+给定一个二叉树，返回它的中序 遍历。
+
+示例:
+```
+输入: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+输出: [1,3,2]
+```
+
+## 方法一：递归
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        res = []
+        def inorder(root, res):
+            if root:                
+                inorder(root.left, res)
+                res.append(root.val)
+                inorder(root.right, res)
+            return res
+        return inorder(root,res)
+```
+
+## 方法二：用栈迭代
+```python
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        stack = [] # 用栈来辅助存储
+        res = []
+        cur = root
+        while stack or cur:
+            while cur: #从根节点開始，一直找它的左子树，直到cur为空
+                stack.append(cur) # 栈中存入根节点和左孩子                
+                cur = cur.left
+            temp = stack.pop() # 出栈，则左孩子先出来，然后才是根结点
+            res.append(temp.val)
+            cur = temp.right #找右子树
+        return res
+```
+
+# LeetCode 145. 二叉树的后序遍历
+给定一个二叉树，返回它的 后序 遍历。
+
+示例:
+```
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [3,2,1]
+```
+
+## 方法一：递归
+```python
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        res = []
+        def postorder(root, res):
+            if root:                
+                postorder(root.left, res)
+                postorder(root.right, res)
+                res.append(root.val)
+            return res
+        return postorder(root,res)  
+```
+
+## 方法二：迭代
+```python
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        stack = [] # 用栈来辅助存储
+        res = []
+        cur = root
+        while stack or cur:
+            while cur: #从根节点開始，一直找它的左子树，直到cur为空
+                stack.append(cur) # 栈中存入根节点和右孩子
+                res.append(cur.val)
+                cur = cur.right
+            cur = stack.pop().left #找左子树
+        return res[::-1] 
+```
+
+# LeetCode 102. 二叉树的层次遍历
+
+# LeetCode 98. 验证二叉搜索树
+# LeetCode 103. 二叉树的锯齿形层次遍历
+# LeetCode 226. 翻转二叉树
+[Invert Binary Tree](https://leetcode-cn.com/problems/invert-binary-tree/)
+# LeetCode 104. 二叉树的最大深度
+# LeetCode 112. 路径总和
 # 参考
 -    《Problem Solving with Algorithms and Data Structures using Python》
 -    [[LeetCode] Inorder Successor in BST 二叉搜索树中的中序后继节点](http://www.cnblogs.com/grandyang/p/5306162.html)

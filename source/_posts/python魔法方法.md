@@ -2,7 +2,7 @@
 title: python 魔法方法
 date: 2019-03-14
 categories: 
-	-   python
+	    -   python
 tags:  
         -   python
 ---
@@ -12,6 +12,7 @@ Python 中有的方法的名称前后都有两个下划线，这些方法被称�
 这里总结一些重要的魔法方法：
 -   构造方法 `__init__` ,  `__new__`
 
+<!-- more -->
 
 # 构造方法
 ## `__init__`
