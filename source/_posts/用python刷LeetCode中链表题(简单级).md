@@ -8,8 +8,22 @@ tags:
         - LeetCode
         - 链表
 ---
+**练习题目：**
+
+-   21. 合并两个有序链表
+-   83. 删除排序链表中的重复元素
+-   141. 环形链表
+-   160. 相交链表
+-   203. 移除链表元素
+-   206. 反转链表
+-   234. 回文链表
+-   237. 删除链表中的节点
+
+<!-- more -->
+
 # 21. 合并两个有序链表
 [Merge Two Sorted Lists](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+
 ## 题目描述
 将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
 
@@ -20,7 +34,6 @@ tags:
 
 > 输出：1->1->2->3->4->4
 
-<!-- more -->
 
 ## 方法
 同时遍历两个链表，每次选取两个链表中较小值的节点，依次连接起来，就能得到最终的链表。
@@ -58,6 +71,7 @@ class Solution:
 ```
 # 83. 删除排序链表中的重复元素
 [Remove Duplicates from Sorted List](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+
 ## 题目描述
 给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
 
@@ -101,6 +115,7 @@ class Solution:
                 q = q.next
         return head
 ```
+
 ## 方法二： 一个指针
 ```python
 class Solution:
@@ -117,15 +132,19 @@ class Solution:
             cur = cur.next
         return head
 ```
+
 # 141. 环形链表
 [Linked List Cycle](https://leetcode-cn.com/problems/linked-list-cycle/)
+
 ## 题目描述
 给定一个链表，判断链表中是否有环。
+
 ## 方法：快慢双指针
-- 通过使用具有**不同速度**的快、慢两个指针遍历链表，空间复杂度可以被降低至 `O(1)`。慢指针每次移动一步，而快指针每次移动两步。
-- 如果列表中不存在环，最终快指针将会最先到达尾部，此时我们可以返回 false。
-- 考虑一个环形链表，把慢指针和快指针想象成两个在环形赛道上跑步的运动员（分别称之为walker与runner）。而runner最终一定会追上walker。这是为什么呢？考虑下面这种情况（记作情况 A） - 假如runner只落后walker一步，在下一次迭代中，它们就会分别跑了一步或两步并相遇。
-- 其他情况又会怎样呢？例如，我们没有考虑快跑者在慢跑者之后两步或三步的情况。但其实不难想到，因为在下一次或者下下次迭代后，又会变成上面提到的情况 A。
+-   通过使用具有**不同速度**的快、慢两个指针遍历链表，空间复杂度可以被降低至 `O(1)`。慢指针每次移动一步，而快指针每次移动两步。
+-   如果列表中不存在环，最终快指针将会最先到达尾部，此时我们可以返回 false。
+-   考虑一个环形链表，把慢指针和快指针想象成两个在环形赛道上跑步的运动员（分别称之为walker与runner）。而runner最终一定会追上walker。这是为什么呢？考虑下面这种情况（记作情况 A） - 假如runner只落后walker一步，在下一次迭代中，它们就会分别跑了一步或两步并相遇。
+-   其他情况又会怎样呢？例如，我们没有考虑快跑者在慢跑者之后两步或三步的情况。但其实不难想到，因为在下一次或者下下次迭代后，又会变成上面提到的情况 A。
+
 ```python
 class Solution(object):
     def hasCycle(self, head):
@@ -146,6 +165,7 @@ class Solution(object):
             return False
 ```
 略微改变语法形式，思路没有区别：
+
 ```python
 class Solution(object):
     def hasCycle(self, head):
@@ -165,8 +185,27 @@ class Solution(object):
             runner = runner.next.next
         return True
 ```
+更简洁的写法
+
+```python
+class Solution(object):
+    def hasCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        fast = slow = head
+        while slow and fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow is fast:
+                return True
+        return False
+```
+
 # 160. 相交链表
 [Intersection of Two Linked Lists](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/solution/)
+
 ## 题目描述
 编写一个程序，找到两个单链表相交的起始节点。
 
@@ -178,14 +217,16 @@ class Solution(object):
 
 注意：
 
-- 如果两个链表没有交点，返回 null.
-- 在返回结果后，两个链表仍须保持原有的结构。
-- 可假定整个链表结构中没有循环。
-- 程序尽量满足 O(n) 时间复杂度，且仅用 O(1) 内存。
+-   如果两个链表没有交点，返回 null.
+-   在返回结果后，两个链表仍须保持原有的结构。
+-   可假定整个链表结构中没有循环。
+-   程序尽量满足 O(n) 时间复杂度，且仅用 O(1) 内存。
+
 ## 方法：两指针
-- 判断链表是否有交集，可以设置两个指针，一个指针从第一个链表开始遍历，遍历完第一个链表再遍历第二个链表，另一个指针从第二个链表开始遍历，遍历完第二个链表再遍历第一个链表.
-- 不管两个链表在交集前的长度如何，遍历两个链表长度总和相同。
-- 如果有交集的话，两个指针肯定会同时遍历到最后的交集部分。
+-   判断链表是否有交集，可以设置两个指针，一个指针从第一个链表开始遍历，遍历完第一个链表再遍历第二个链表，另一个指针从第二个链表开始遍历，遍历完第二个链表再遍历第一个链表.
+-   不管两个链表在交集前的长度如何，遍历两个链表长度总和相同。
+-   如果有交集的话，两个指针肯定会同时遍历到最后的交集部分。
+
 ```python
 class Solution(object):
     def getIntersectionNode(self, headA, headB):
@@ -202,7 +243,9 @@ class Solution(object):
             pb = headA if pb == None else pb.next
         return pa
 ```
+
 # 203. 移除链表元素
+
 ## 题目描述
 删除链表中等于给定值 val 的所有节点。
 
@@ -211,9 +254,11 @@ class Solution(object):
 >输入: 1->2->6->3->4->5->6, val = 6
 
 >输出: 1->2->3->4->5
+
 ## 方法：dummy node
 - 有了第83题的思路，我们这里可以用一个指针来进行链表的遍历，
 - 但是这里需要注意的是，头节点也需要进行判断，如果头节点的值等于val的话，我们不能返回头节点，所以这里很巧妙的重新生成了一个无关的头节点dummy node。
+
 ```python
 class Solution(object):
     def removeElements(self, head, val):
@@ -231,8 +276,10 @@ class Solution(object):
             cur = cur.next
         return dummy.next
 ```
+
 # 206. 反转链表
 [Reverse Linked List](https://leetcode-cn.com/problems/reverse-linked-list/)
+
 ## 题目描述
 反转一个单链表。
 
@@ -241,9 +288,10 @@ class Solution(object):
 > 输入: 1->2->3->4->5->NULL
 
 >输出: 5->4->3->2->1->NULL
+
 ## 方法：两个指针，头插法
-- 用两个指针，p指针记录的是每次的队头元素，q指针指向下一个要插入队头的元素。
-- head帮忙指向下轮要头插的元素，待本轮指针翻转完之后要把该元素赋给q
+-   用两个指针，p指针记录的是每次的队头元素，q指针指向下一个要插入队头的元素。
+-   head帮忙指向下轮要头插的元素，待本轮指针翻转完之后要把该元素赋给q
 
 ```python
 class Solution(object):
@@ -264,8 +312,20 @@ class Solution(object):
         return p
 ```
 
+## 较简洁的写法
+
+```python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        cur, prev = head, None
+        while cur:
+            cur.next, prev, cur = prev, cur, cur.next
+        return prev
+```
+
 # 234. 回文链表
 [Palindrome Linked List](https://leetcode-cn.com/problems/palindrome-linked-list/)
+
 ## 题目描述
 请判断一个链表是否为回文链表。
 
@@ -315,6 +375,7 @@ class Solution(object):
 
 # 237. 删除链表中的节点
 [Delete Node in a Linked List](https://leetcode-cn.com/problems/delete-node-in-a-linked-list/) 
+
 ## 题目描述
 输入：要求被删除的（非末尾）节点
 

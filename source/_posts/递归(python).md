@@ -39,6 +39,7 @@ class Solution:
             return N
         return self.fib(N-1) + self.fib(N-2)
 ```
+动态规划方法参见：[动态规划](https://cathy3.github.io/2019/04/05/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/)
 
 # 求阶乘 n!
 ```python

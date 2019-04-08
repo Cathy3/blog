@@ -73,7 +73,11 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: next
-
+# 搜索
+search:
+  path: search.xml
+  field: post
+  content: true
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 

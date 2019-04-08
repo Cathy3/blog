@@ -39,7 +39,7 @@ $F_{10} = 55$
 0 1 1 2 3 5 8 13 
 
 ## Naive Algorithm
-递归
+递归 
 ```python
 def calc_fib(n):
     if (n <= 1):
@@ -55,10 +55,13 @@ print(calc_fib(34))
     8
     6765
     5702887
+时间复杂度：$O(2^n)$
 
-<!-- more -->
+
 ## Fast Algorithm
-
+动态规划
+-   递归 + 记忆化 -> 递推
+-   递推公式：A[i] = A[i-1] + A[i-2]
 
 ```python
 def calc_fibFast(n):
@@ -78,6 +81,7 @@ print(calc_fibFast(34))
     6765
     5702887
 
+时间复杂度：$O(n)$
 
 
 ```python
