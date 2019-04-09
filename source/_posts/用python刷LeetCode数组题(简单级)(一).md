@@ -25,7 +25,7 @@ tags:
 所以返回 [0, 1]
 ```
 ## 方法：字典
-利用python中的字典记录记录下每个元素出现的位置
+利用python中的字典记录记录下每个元素出现的位置。key记差值，value记已有数值的位置。
 
 ```python
 class Solution(object):
