@@ -15,10 +15,8 @@ mathjax: true
 -    算法原理
 -    损失函数
 -    分裂结点算法
--    正则化
 -    对缺失值处理
 -    优缺点
--    应用场景
 -    sklearn参数
 
 <!-- more -->
@@ -62,8 +60,92 @@ $$
 where\ F=\left\{f(x)=w_{q(x)}\right\}\left(q : R^{m} \rightarrow T, w \in R^{T}\right)
 $$
 
-注：w_q(x)为叶子节点q的分数，f(x)为其中一棵回归树
+注：$w_q(x)$ 为叶子节点 $q$ 的分数，$f(x)$为其中一棵回归树
 
+# XGBoost原理
+XGBoost目标函数定义为：
+
+$$
+O b j=\sum_{i=1}^{n} l\left(y_{i}, \hat{y}_{i}\right)+\sum_{k=1}^{K} \Omega\left(f_{k}\right)
+\\
+where\ \Omega(f)=\gamma T+\frac{1}{2} \lambda\|w\|^{2}
+$$
+
+目标函数由两部分构成，第一部分用来衡量预测分数和真实分数的差距（损失），另一部分则是正则化项。
+
+正则化项同样包含两部分，$T$ 表示叶子结点的个数，$w$ 表示叶子结点的分数。$γ$ 可以控制叶子结点的个数，$λ$ 可以控制叶子节点的分数不会过大，防止过拟合。$y_i$ 即为真实值，$\hat{y}_{i}$ 为预测值。
+
+正如上文所说，新生成的树是要拟合上次预测的残差的，即当生成 $t$ 棵树后，预测分数可以写成：
+
+$$
+\hat{y}_{i}^{(t)}=\hat{y}_{i}^{(t-1)}+f_{t}\left(x_{i}\right)
+$$
+
+同时，可以将目标函数改写成：
+
+$$
+\mathcal{L}^{(t)}=\sum_{i=1}^{n} l\left(y_{i}, \hat{y}_{i}^{(t-1)}+f_{t}\left(x_{i}\right)\right)+\Omega\left(f_{t}\right)
+$$
+
+很明显，我们接下来就是要去找到一个 $f_t$ 能够最小化目标函数。XGBoost的想法是利用其在 $f_t=0$ 处的泰勒二阶展开近似它。
+
+泰勒展开：$f(x+\Delta x) \simeq f(x)+f^{\prime}(x) \Delta x+\frac{1}{2} f^{\prime \prime}(x) \Delta x^{2}$
+
+先定义一阶导数和二阶导数：$g_{i}=\partial_{\hat{y}^{(t-1)}} l\left(y_{i}, \hat{y}^{(t-1)}\right), \quad h_{i}=\partial_{\hat{y}^{(t-1)}}^{2} l\left(y_{i}, \hat{y}^{(t-1)}\right)$
+
+所以，目标函数近似为：
+
+$$
+O b j^{(t)} \simeq \sum_{i=1}^{n}\left[l\left(y_{i}, \hat{y}_{i}^{(t-1)}\right)+g_{i} f_{t}\left(x_{i}\right)+\frac{1}{2} h_{i} f_{t}^{2}\left(x_{i}\right)\right]+\Omega\left(f_{t}\right)+ constant
+$$
+
+由于前t-1棵树的预测分数与y的残差对目标函数优化不影响，可以直接去掉。我们知道，每个样本都最终会落到一个叶子结点中，所以我们可以将所以同一个叶子结点的样本重组起来，过程如下：
+
+$$
+\begin{aligned} O b j^{(t)} & \simeq \sum_{i=1}^{n}\left[g_{i} f_{t}\left(x_{i}\right)+\frac{1}{2} h_{i} f_{t}^{2}\left(x_{i}\right)\right]+\Omega\left(f_{t}\right) \\ &=\sum_{i=1}^{n}\left[g_{i} w_{q\left(x_{i}\right)}+\frac{1}{2} h_{i} w_{q\left(x_{i}\right)}^{2}\right]+\gamma T+\lambda \frac{1}{2} \sum_{j=1}^{T} w_{j}^{2} \\ &=\sum_{j=1}^{T}\left[\left(\sum_{i \in I_{j}} g_{i}\right) w_{j}+\frac{1}{2}\left(\sum_{i \in I_{j}} h_{i}+\lambda\right) w_{j}^{2}\right]+\gamma T \end{aligned}
+$$
+
+因此通过上式的改写，我们可以将目标函数改写成关于叶子结点分数 $w$ 的一个一元二次函数，求解最优的 $w$ 和目标函数值就变得很简单了，直接使用顶点公式即可。因此，最优的 $w$ 和目标函数公式为
+
+$$
+w_{j}^{*}=-\frac{G_{j}}{H_{j}+\lambda}
+\\
+O b j=-\frac{1}{2} \sum_{j=1}^{T} \frac{G_{j}^{2}}{H_{j}+\lambda}+\gamma T
+$$
+
+# 分裂结点算法
+在上面的推导中，我们知道了如果我们一棵树的结构确定了，如何求得每个叶子结点的分数。但我们还没介绍如何确定树结构，即每次特征分裂怎么寻找最佳特征，怎么寻找最佳分裂点。
+
+正如上文说到，基于空间切分去构造一颗决策树是一个NP难问题，我们不可能去遍历所有树结构，因此，XGBoost使用了和CART回归树一样的想法，利用贪婪算法，遍历所有特征的所有特征划分点，不同的是使用上式目标函数值作为评价函数。具体做法就是对比分裂后的目标函数值与单子叶子节点的目标函数增益，同时为了限制树生长过深，还加了个阈值，只有当增益大于该阈值才进行分裂。
+
+同时可以设置树的最大深度、当样本权重和小于设定阈值时停止生长去防止过拟合。
+
+# Shrinkage and Column Subsampling
+XGBoost还提出了两种防止过拟合的方法：Shrinkage and Column Subsampling。
+
+Shrinkage方法就是在每次迭代中对树的每个叶子结点的分数乘上一个缩减权重η，这可以使得每一棵树的影响力不会太大，留下更大的空间给后面生成的树去优化模型。
+
+Column Subsampling类似于随机森林中的选取部分特征进行建树。其可分为两种，
+-    一种是按层随机采样，在对同一层内每个结点分裂之前，先随机选择一部分特征，然后只需要遍历这部分的特征，来确定最优的分割点。
+-    另一种是随机选择特征，建树前随机选择一部分特征然后分裂就只遍历这些特征。一般情况下前者效果更好。
+
+# 近似算法
+对于连续型特征值，当样本数量非常大，该特征取值过多时，遍历所有取值会花费很多时间，且容易过拟合。因此XGBoost思想是对特征进行分桶，即找到l个划分点，将位于相邻分位点之间的样本分在一个桶中。在遍历该特征的时候，只需要遍历各个分位点，从而计算最优划分。
+
+从算法伪代码中该流程还可以分为两种，全局的近似是在新生成一棵树之前就对各个特征计算分位点并划分样本，之后在每次分裂过程中都采用近似划分，而局部近似就是在具体的某一次分裂节点的过程中采用近似算法。
+
+
+# 针对稀疏矩阵的算法（缺失值处理）
+当样本的第 $i$ 个特征值缺失时，无法利用该特征进行划分时，XGBoost的想法是将该样本分别划分到左结点和右结点，然后计算其增益，哪个大就划分到哪边。
+
+
+# XGBoost的优点
+1.   使用许多策略去防止过拟合，如：正则化项、Shrinkage and Column Subsampling等。
+2.   目标函数优化利用了损失函数关于待求函数的二阶导数
+3.   支持并行化，这是XGBoost的闪光点，虽然树与树之间是串行关系，但是同层级节点可并行。具体的对于某个节点，节点内选择最佳分裂点，候选分裂点计算增益用多线程并行。训练速度快。
+4.    添加了对稀疏数据的处理。
+5.    交叉验证，early stop，当预测结果已经很好的时候可以提前停止建树，加快训练速度。
+6.    支持设置样本权重，该权重体现在一阶导数g和二阶导数h，通过调整权重可以去更加关注一些样本。
 
 # xgboost参数
 官方参数介绍看这里： 
@@ -126,7 +208,9 @@ lambda –> reg_lambda
 alpha –> reg_alpha
 
 
-# 参考  
+# 参考 
+-    [XGBoost-ZDK](https://zdkswd.github.io/2019/02/25/XGBoost/) 
+-    [一文读懂机器学习大杀器XGBoost原理](https://mp.weixin.qq.com/s/AnENu0i3i5CdUQkZscMKgQ)
 -    [XGBoost-Python完全调参指南-参数解释篇](https://blog.csdn.net/wzmsltw/article/details/50994481)
 -    [Complete Guide to Parameter Tuning in XGBoost (with codes in Python)](https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/)
 -    [XGBoost：参数解释](http://blog.csdn.net/zc02051126/article/details/46711047)

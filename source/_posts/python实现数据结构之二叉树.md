@@ -13,6 +13,7 @@ mathjax: true
 二叉查找树（英语：Binary Search Tree），也称为二叉搜索树、有序二叉树（ordered binary tree）或排序二叉树（sorted binary tree）。
 
 **学习目标：**
+
 -   实现一个二叉查找树，并且支持插入、删除、查找操作
     -   LeetCode 108. 将有序数组转换为二叉搜索树
     -   LeetCode 109. 有序链表转换二叉搜索树
