@@ -157,6 +157,7 @@ class Solution(object):
 
 # 35. 搜索插入位置
 [Search Insert Position](https://leetcode-cn.com/problems/search-insert-position/)
+
 ## 题目描述
 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
 
@@ -220,6 +221,7 @@ class Solution(object):
         return left
 ```
 理论上应该比前一个方法快，实际测评结果较慢。
+
 # 53. 最大子序和
 [Maximum Subarray](https://leetcode-cn.com/problems/maximum-subarray/)
 
@@ -316,6 +318,7 @@ class Solution:
 ```
 # 88. 合并两个有序数组
 [Merge Sorted Array](https://leetcode-cn.com/problems/merge-sorted-array/)
+
 ## 题目描述
 给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
 
@@ -360,6 +363,7 @@ class Solution(object):
 ```
 # 118. 杨辉三角
 [Pascal's Triangle](https://leetcode-cn.com/problems/pascals-triangle/)
+
 ## 题目描述
 给定一个非负整数 numRows，生成杨辉三角的前 numRows 行。
 
@@ -501,6 +505,7 @@ class Solution(object):
 
 # 122. 买卖股票的最佳时机 II
 [Best Time to Buy and Sell Stock II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
+
 ## 题目描述
 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
 
@@ -582,5 +587,6 @@ class Solution(object):
 ```
 
 # 参考
-- [3个月用python刷完leetcode600题!-数组简单题（一）](https://ask.hellobi.com/blog/wenwen/8617)
-- [Largest Sum Contiguous Subarray](https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/)
+
+-   [3个月用python刷完leetcode600题!-数组简单题（一）](https://ask.hellobi.com/blog/wenwen/8617)
+-   [Largest Sum Contiguous Subarray](https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/)

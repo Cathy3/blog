@@ -1,12 +1,11 @@
 ---
-title: 递归(python)
+title: 递归算法(python实现)
 date: 2019-03-02
 categories: 
 	- Algorithm
 tags:  
         - python
         - LeetCode
-        - 数据结构
         - 递归
 ---
 在函数的定义中对这个函数自身的调用，就是递归。
@@ -18,6 +17,8 @@ tags:
 -   编程实现斐波那契数列求值 f(n)=f(n-1)+f(n-2)
 -   编程实现求阶乘 n!
 -   编程实现一组数据集合的全排列
+    -   LeetCode 46. 全排列
+    -   LeetCode 47. 全排列 II
 -   LeetCode 70. 爬楼梯
 
 以上问题都可以用递归来解决。
