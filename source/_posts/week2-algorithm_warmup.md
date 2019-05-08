@@ -15,8 +15,8 @@ mathjax: true
  - Practice solving programming challenges
  - Implement programs that are several orders of magnitude faster than straightforward programs
 
-# Fibonacci Numbers
-## 斐波那契数列
+# 斐波那契数列
+## Fibonacci Numbers
 **Task.** Given an integer $n$,  find the last digit of the nth Fibonacci number $F_n$.
 
 <!-- more -->
@@ -38,8 +38,9 @@ $F_{10} = 55$
 
 0 1 1 2 3 5 8 13 
 
-## Naive Algorithm
-递归 
+## 递归
+Naive Algorithm
+
 ```python
 def calc_fib(n):
     if (n <= 1):
@@ -58,8 +59,9 @@ print(calc_fib(34))
 时间复杂度：$O(2^n)$
 
 
-## Fast Algorithm
-动态规划
+## 动态规划
+Fast Algorithm
+
 -   递归 + 记忆化 -> 递推
 -   递推公式：A[i] = A[i-1] + A[i-2]
 
@@ -107,8 +109,8 @@ print(calc_fibFast(34))
     5702887
 
 
-# Last Digit of a Large Fibonacci Number
-## 求斐波那契数的个位数
+# 斐波那契数的个位数
+## Last Digit of a Large Fibonacci Number
 
 **Task.** Given an integer $n$,  fnd the last digit of the nth Fibonacci number $F_n$ mod $m$ (that is, $F_n$ mod 10).
 
@@ -127,8 +129,6 @@ Output:
 ```
 $F_3 = 2$.
 ## Naive Algorithm
-
-
 
 ```python
 def get_fibonacci_last_digit_naive(n):
@@ -186,8 +186,8 @@ print(get_fibonacci_last_digit_Fast(331))
     9
 
 
-# Greatest Common Divisor
-## 最大公约数
+# 最大公约数
+## Greatest Common Divisor
 **Task.** Given two integers $a$ and $b$, find their greatest common divisor.
 
 **Input Format.** The two integers $a$ and $b$ are given in the same line separated by space..
@@ -204,6 +204,7 @@ Output:
 1
 ```
 18 and 35 do not have common non-trivial divisors.
+
 ## Naive Algorithm
 同时能整除a和b的最大的数
 
@@ -227,8 +228,8 @@ print(gcd_naive(28851538, 1183019))
     17657
 
 
-## Fast Algorithm
-辗转相除法， 又名欧几里德算法（Euclidean algorithm）
+## 辗转相除法
+又名欧几里德算法（Euclidean algorithm）
 
 
 ```python
@@ -248,8 +249,8 @@ print(gcd_Euclid(28851538, 1183019))
     17657
 
 
-# Least Common Multiple
-## 最小公倍数
+# 最小公倍数
+## Least Common Multiple
 **Task.** Given two integers $a$ and $b$, fnd their least common multiple.
 
 **Input Format.** The two integers $a$ and $b$ are given in the same line separated by space..
@@ -309,8 +310,8 @@ print(lcm_fast(28851538, 1183019))
     1933053046
 
 
-# Fibonacci Number modulo m
-## 斐波那契数取余
+# 斐波那契数取余
+## Fibonacci Number modulo m
 
 | $i$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
 | ---- | --- |
@@ -341,9 +342,8 @@ Output:
 161
 ```
 $F_239 mod 1000 = 39 679 027 332 006 820 581 608 740 953 902 289 877 834 488 152 161 (mod 1 000) = 161$.
+
 ## Naive Algorithm
-
-
 
 ```python
 def get_fibonacci_huge_naive(n, m):
@@ -391,8 +391,8 @@ print(get_fibonacci_huge_fast(2816213588, 239))
     151
 
 
-# Last Digit of the Sum of Fibonacci Numbers
-## 求斐波那契数之和的个位数
+# 斐波那契数之和的个位数
+## Last Digit of the Sum of Fibonacci Numbers
 **Task.** Given an integer $n$, fnd the last digit of the sum $F_0 + F_1 + · · · + F_n$.
 
 **Input Format.** The input consists of a single integer $n$.
@@ -409,9 +409,8 @@ Output:
 4
 ```
 $F_0 + F_1 + F_2 + F_3 = 0 + 1 + 1 + 2= 4$.
+
 ## Naive Algorithm
-
-
 
 ```python
 def fibonacci_sum_naive(n):
@@ -517,8 +516,8 @@ print(fibonacci_sum_more_fast(832564823476))
 
 考虑到余数t==0的情况，A[t-1]值会出问题，因为是新一周期循环，值为0，所以，可以令t=period-1
 
-# Last Digit of the Sum of Fibonacci Numbers Again
-## 求斐波那契数之部分和的个位数
+# 斐波那契数之部分和的个位数
+## Last Digit of the Sum of Fibonacci Numbers Again
 **Task.** Given two non-negative integers $m$ and $n$, where $m≤n$, fnd the last digit of the sum $F_m + F_{m+1} + · · · + F_n$.
 
 **Input Format.** The input consists of two non-negative integers $m$ and $n$ separated by a space.
@@ -535,8 +534,8 @@ Output:
 1
 ```
 $F_3 + F_4 + F_5 + F_6 + F_7 = 2 + 3 + 5 + 8 + 13 = 31$.
-## Naive Algorithm
 
+## Naive Algorithm
 
 ```python
 def fibonacci_partial_sum_naive(from_, to):
@@ -567,9 +566,7 @@ print(fibonacci_partial_sum_naive(10, 200))
     5
     2
 
-
 ## Fast Algorithm
-
 
 ```python
 def fibonacci_partial_sum_fast(from_, to):
@@ -623,8 +620,8 @@ print(fibonacci_partial_sum_fast(10, 200))
     return (2*(A[t]-A[] + A[t-1] - 1) % 10
 ```
 
-# Last Digit of the Sum of Squares of Fibonacci Numbers
-## 求斐波那契数平方之和的个位数
+# 斐波那契数平方之和的个位数
+## Last Digit of the Sum of Squares of Fibonacci Numbers
 **Task.** Compute the last digit of $F_0^2 + F_1^2 + · · · + F_n^2$.
 
 **Input Format.** Integer n.

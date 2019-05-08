@@ -22,6 +22,7 @@ mathjax: true
 4. 把子问题的解局部最优解合成原来解问题的一个解。
 
 注意：
+
 -   贪心算法与动态规划的不同在于它对每个子问题的解决方案都做出选择，不能回退。动态规划则会保存以前的运算结果，并根据以前的结果对当前进行选择，有回退功能。
 -   贪心法可以解决一些最优化问题，如：求图中的最小生成树、求哈夫曼编码……
 -   对于大部分的问题，贪心法通常都不能找出最佳解（不过也有例外），因为他们一般没有测试所有可能的解。贪心法容易过早做决定，因而没法达到最佳解。例如，所有对图着色问题。
@@ -47,7 +48,8 @@ one optimal solution.
 (e) maximizing the number of prize places in a competition;
 (f) finally, maximizing your salary!
 
-# 兑换零钱(Money Change)
+# 兑换零钱
+## Money Change
 **Task.** 根据输入值，找到需要兑换 1, 5, 10面额硬币的最少个数.
 
 **Input Format.** 输入一个整数$m$.
@@ -112,7 +114,8 @@ print(get_changeC(999))
     104
 
 
-# 背包问题(Maximum Value of the Loot )
+# 背包问题
+## Maximum Value of the Loot
 **Task.** A thief finds much more loot than his bag can fit. Help him to find the most valuable combination of items assuming that any fraction of a loot item can be put into his bag.
 
 **Input Format.** 输入包可承受的重量(capacity)$W$，$n$件掠夺品的重量weights和价值values分别是$w_i,v_i$
@@ -200,7 +203,7 @@ print("{:.10f}".format(get_optimal_value(50, [20,50,30], [60,100,120])))
 
 
 # 广告点击最大收益
-（Maximum Advertisement Revenue）
+## Maximum Advertisement Revenue
 
 **Task.**  You have $n$ ads to place on a popular Internet page. For each ad, you know how much is the advertiser willing to pay for one click on this ad. You have set up $n$
 slots on your page and estimated the expected number of clicks per day for each
@@ -245,7 +248,7 @@ print(max_dot_product([1,3,-5], [-2,4,1]))
 
 
 # 找房客签字的最佳时间点
-Collecting Signatures
+## Collecting Signatures
 
 **Task.**  You are responsible for collecting signatures from all tenants of a certain building. For each tenant, you know a period of time when he or she is at home.
 You would like to collect all signatures by visiting the building as few times as
