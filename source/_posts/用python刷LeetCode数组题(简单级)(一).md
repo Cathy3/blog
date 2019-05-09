@@ -8,6 +8,9 @@ tags:
         - LeetCode
         - 数组
 ---
+
+<!-- more -->
+
 # 1. 两数之和
 [Two Sum](https://leetcode-cn.com/problems/two-sum/)
 
@@ -16,7 +19,7 @@ tags:
 
 你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
 
-<!-- more -->
+
 
 **示例:**
 ```
@@ -261,6 +264,20 @@ class Solution(object):
                 max_so_far = max_ending_here
         return max_so_far
 ```
+
+## 方法： 动态规划
+
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        maxsum = res = nums[0]
+        for i in range(1, len(nums)):
+            maxsum = max(maxsum + nums[i], nums[i])
+            res = max(maxsum, res)
+        return res
+```
+结果不如前一种方法快
+
 # 66. 加一
 [Plus One](https://leetcode-cn.com/problems/plus-one/)
 
@@ -303,6 +320,7 @@ class Solution:
         digits.append(0)
         return digits
 ```
+
 ## 方法二：转数字→字符串→int
 ```python
 class Solution:
@@ -417,10 +435,10 @@ class Solution(object):
 在杨辉三角中，每个数是它左上方和右上方的数的和。
 
 **示例:**
-
-> 输入: 3
-> 输出: [1,3,3,1]
-
+```
+输入: 3
+输出: [1,3,3,1]
+```
 ## 方法
 思路同上一题
 ```python
@@ -438,6 +456,7 @@ class Solution(object):
 
 # 121. 买卖股票的最佳时机
 [Best Time to Buy and Sell Stock](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+
 ## 题目描述
 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
 
@@ -446,17 +465,18 @@ class Solution(object):
 注意你不能在买入股票前卖出股票。
 
 **示例 1:**
-
-> 输入: [7,1,5,3,6,4]
-> 输出: 5
-> 解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+```
+输入: [7,1,5,3,6,4]
+输出: 5
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
      注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格。
-
+```
 **示例 2:**
-
-> 输入: [7,6,4,3,1]
-> 输出: 0
-> 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+```
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+```
 
 ## 方法一：遍历
 根据题意，我们只需要找出数组中最大的差值即可，即 `max(prices[j] – prices[i]) ，i < j` 。
