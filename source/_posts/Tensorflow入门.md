@@ -1,5 +1,5 @@
 ---
-title:Tensorflow入门
+title: Tensorflow入门
 date: 2019-05-09
 categories: 
 	    -   机器学习
@@ -12,6 +12,8 @@ mathjax: true
 ---
 
 这里编写一个最简单的神经网络，以此了解深度学习的整个训练过程。
+
+<!-- more -->
 
 # Imports
 导入keras框架，用来定义神经网络的一系列Sequential层
