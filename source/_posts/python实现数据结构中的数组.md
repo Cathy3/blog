@@ -16,9 +16,11 @@ tags:
 
 
 学习目标：
+
 -   实现一个支持动态扩容的数组
 -   实现一个大小固定的有序数组，支持动态增删改操作
-
+-   Leetcode 88. [合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
+-   Leetcode 1. [两数之和](https://leetcode-cn.com/problems/two-sum/)
 
 <!-- more -->
 
@@ -132,7 +134,6 @@ if __name__ == '__main__':
 ```
 # Leetcode习题 
 ## 88. 合并两个有序数组
-[Merge Sorted Array](https://leetcode-cn.com/problems/merge-sorted-array/)
 
 给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
 
@@ -177,7 +178,7 @@ class Solution(object):
 ```
 
 ## 1. 两数之和
-[Two Sum](https://leetcode-cn.com/problems/two-sum/)
+
 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那**两个**整数，并返回他们的数组下标。
 
 你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。

@@ -421,5 +421,5 @@ class Solution(object):
         node.next = node.next.next
 ```
 # 参考
-- [3个月用python刷完leetcode600题!-linked_list简单题](https://ask.hellobi.com/blog/wenwen/8653)
-- [21. Merge Two Sorted Lists [easy] (Python)](https://blog.csdn.net/coder_orz/article/details/51529359)
+-   [3个月用python刷完leetcode600题!-linked_list简单题](https://ask.hellobi.com/blog/wenwen/8653)
+-   [21. Merge Two Sorted Lists [easy] (Python)](https://blog.csdn.net/coder_orz/article/details/51529359)

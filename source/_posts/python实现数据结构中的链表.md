@@ -14,6 +14,7 @@ tags:
 
 学习目标：
 -   实现单链表、循环链表、双向链表，支持增删操作。
+-   leetcode 206. 反转链表
 
 <!-- more -->
 
@@ -164,8 +165,7 @@ if __name__ == '__main__':
 ```
 
 
-# Leetcode习题 
-## 206. 反转链表
+# Leetcode 206.反转链表
 [Reverse Linked List](https://leetcode-cn.com/problems/reverse-linked-list/)
 
 反转一个单链表。
