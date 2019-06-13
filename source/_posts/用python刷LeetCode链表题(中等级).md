@@ -26,6 +26,7 @@ tags:
 -   379. 
 
 <!-- more -->
+
 # 2. 两数相加
 给出两个**非空**的链表用来表示两个非负的整数。其中，它们各自的位数是按照**逆序**的方式存储的，并且它们的每个节点只能存储**一位**数字。
 
@@ -40,8 +41,34 @@ tags:
 原因：342 + 465 = 807
 ```
 
-## 方法
+## 方法：偷懒做法
+先求和，再构建链表。这个方法比较暴力。
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
 
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        num1 = ''
+        num2 = ''
+        while l1:#243
+            num1 += str(l1.val)
+            l1 = l1.next
+        while l2:#564
+            num2 += str(l2.val)
+            l2 = l2.next
+        add = str(int(num1[::-1]) + int(num2[::-1]))[::-1] #342+465=807---708
+        head = ListNode(add[0])
+        res = head
+        for i in range(1,len(add)):
+            node = ListNode(add[i])
+            head.next = node
+            head = head.next
+        return res
+```
 
 # 24. 两两交换链表中的节点
 [Swap Nodes in Pairs](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
@@ -78,3 +105,5 @@ class Solution:
 ```
 
 
+# 参考
+-   [LeetCode 2. Add Two Numbers 解题报告（Python & C++）](https://blog.csdn.net/fuxuemingzhu/article/details/79379626)

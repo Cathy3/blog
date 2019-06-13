@@ -4,7 +4,7 @@ date: 2019-02-20
 categories: 
 		- Algorithm
 tags:  
-        - python
+        - pythongit
         - LeetCode
         - 链表
 ---
