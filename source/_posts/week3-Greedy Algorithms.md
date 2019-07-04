@@ -1,5 +1,5 @@
 ---
-title: week3-贪心算法
+title: 贪心算法
 date: 2018-10-24
 categories: 
 		- Algorithm

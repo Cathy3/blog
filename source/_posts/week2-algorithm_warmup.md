@@ -128,6 +128,7 @@ Output:
 2
 ```
 $F_3 = 2$.
+
 ## Naive Algorithm
 
 ```python
@@ -231,6 +232,12 @@ print(gcd_naive(28851538, 1183019))
 ## 辗转相除法
 又名欧几里德算法（Euclidean algorithm）
 
+1. 对两个数字进行 mod 取余运算
+2. 接下来再用**除数**和**余数**进行 mod 运算。
+
+继续重复同样的操作。
+
+**余数**为0时，最后一次运算中的**除数**就是两个数字的最大公约数。
 
 ```python
 def gcd_Euclid(a, b):
@@ -247,7 +254,9 @@ print(gcd_Euclid(28851538, 1183019))
     4
     1
     17657
+使用欧几里得算法，只需重复做除法便能求得最大公约数。
 
+这个算法最大的优势就在于，即使两个数字再大，只要按照步骤进行操作就能高效地求得两者的最大公约数。
 
 # 最小公倍数
 ## Least Common Multiple
@@ -268,6 +277,7 @@ Output:
 ```
 Among all the positive integers that are divisible by both 6 and 8 (e.g., 48, 480, 24), 24 is the smallest
 one.
+
 ## Naive Algorithm
 同时是a和b的倍数的最小值
 
