@@ -18,6 +18,9 @@ mathjax: true
 -   129. 
 -   257.   
 -   298. 
+-   687. 最长同值路径
+-   783. 二叉搜索树结点最小距离
+-   938. 二叉搜索树的范围和
 
 <!-- more -->
 
@@ -130,7 +133,7 @@ class Solution:
 说明: 叶子节点是指没有子节点的节点。
 
 示例:
-
+```
 给定二叉树 [3,9,20,null,null,15,7],
 
     3
@@ -139,7 +142,157 @@ class Solution:
     /  \
    15   7
 返回它的最小深度  2.
+```
 
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/minimum-depth-of-binary-tree
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+## 方法：递归 + BFS
+发现这层有个叶子的话，就直接返回就行了
+叶子的深度是1
+
+```python
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0 # 当root为空的时候直接返回0
+        left = self.minDepth(root.left)
+        right = self.minDepth(root.right)
+        if not left:# 判断树的深度应该到叶子节点，也就是左右子结点都为空的那个结点
+            return right + 1 
+        if not right:
+            return left + 1
+        return 1 + min(left, right)
+```
+
+
+# 687. 最长同值路径
+给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。
+
+注意：两个节点之间的路径长度由它们之间的边数表示。
+
+示例 1:
+```
+输入:
+
+              5
+             / \
+            4   5
+           / \   \
+          1   1   5
+输出:2
+```
+示例 2:
+```
+输入:
+
+              1
+             / \
+            4   5
+           / \   \
+          4   4   5
+输出:2
+```
+注意: 给定的二叉树不超过10000个结点。 树的高度不超过1000。
+
+## 方法:递归 + dfs
+求一个顶点到所有根节点的路径，时刻保留相等元素的最大值。相等元素的最大值是左右子树的相等元素的最大值+1，所以是递归。
+
+定义的DFS函数是获得在通过root节点的情况下，最长单臂路径。其中更新的res是左右臂都算上的。所以这个题和普通的题是有点不一样。
+
+```python
+class Solution:
+    def longestUnivaluePath(self, root: TreeNode) -> int:
+        longest = [0]
+        def dfs(root):
+            if not root:
+                return 0
+            left_len, right_len = dfs(root.left), dfs(root.right)
+            left = left_len + 1 if root.left and root.left.val == root.val else 0 
+            right = right_len + 1 if root.right and root.right.val == root.val else 0
+            longest[0] = max(longest[0], left + right)
+            return max(left, right)
+        dfs(root)
+        return longest[0]
+```
+
+# 783. 二叉搜索树结点最小距离
+该题和[530. 二叉搜索树的最小绝对差](https://leetcode-cn.com/problems/minimum-absolute-difference-in-bst/) 一样。可以用相同方法解题。
+
+给定一个二叉搜索树的根结点 root, 返回树中任意两节点的差的最小值。
+
+示例：
+```
+输入: root = [4,2,6,1,3,null,null]
+输出: 1
+解释: 注意，root是树结点对象(TreeNode object)，而不是数组。
+```
+给定的树 [4,2,6,1,3,null,null] 可表示为下图:
+```
+          4
+        /   \
+      2      6
+     / \    
+    1   3  
+```
+最小的差值是 1, 它是节点1和节点2的差值, 也是节点3和节点2的差值。
+
+注意：
+
+二叉树的大小范围在 2 到 100。
+
+二叉树总是有效的，每个节点的值都是整数，且不重复。
+
+
+## 方法：中序遍历+递归
+中序遍历，得到有序列表，然后找出相邻的两个节点差值的最小值
+
+```python
+class Solution:
+    def minDiffInBST(self, root: TreeNode) -> int:
+        vals = []
+        def inOrder(root):
+            if not root:
+                return 
+            inOrder(root.left)
+            vals.append(root.val)
+            inOrder(root.right)
+        inOrder(root)
+        return min([vals[i+1]-vals[i] for i in range(len(vals)-1)])
+```
+
+
+# 938. 二叉搜索树的范围和
+给定二叉搜索树的根结点 root，返回 L 和 R（含）之间的所有结点的值的和。
+
+二叉搜索树保证具有唯一的值。
+
+示例 1：
+```
+输入：root = [10,5,15,3,7,null,18], L = 7, R = 15
+输出：32
+```
+示例 2：
+```
+输入：root = [10,5,15,3,7,13,18,1,null,6], L = 6, R = 10
+输出：23
+```
+提示：树中的结点数量最多为 10000 个。最终的答案保证小于 2^31。
+
+## 方法：BST+递归
+```python
+class Solution:
+    def rangeSumBST(self, root: TreeNode, L: int, R: int) -> int:
+        if not root:
+            return 0
+        res = 0
+        if L <= root.val <= R:
+            res += root.val
+            res += self.rangeSumBST(root.left, L, R)
+            res += self.rangeSumBST(root.right, L, R)
+        elif root.val < L:
+            res += self.rangeSumBST(root.right, L, R)
+        elif root.val > R:
+            res += self.rangeSumBST(root.left, L, R)
+        return res
+```
+
+# 参考
+-   [687. Longest Univalue Path 解题报告（Python & C++）- 负雪明烛](https://blog.csdn.net/fuxuemingzhu/article/details/79248926)
