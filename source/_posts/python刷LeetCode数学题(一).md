@@ -6,6 +6,8 @@ categories:
 tags:  
         - python
         - LeetCode
+        - 牛客
+mathjax: true
 ---
 -   7. 整数反转
 -   8. 字符串转换整数 (atoi)
@@ -13,6 +15,7 @@ tags:
 -   9. 回文数
 -   13. 罗马数字转整数
 -   204. 计数素数
+
 
 <!-- more -->
 
@@ -38,7 +41,7 @@ tags:
 
 假设我们的环境只能存储得下 32 位的有符号整数，则其数值范围为 [−231,  231 − 1]。请根据这个假设，如果反转后整数溢出那么就返回 0。
 
-# 方法一:取模
+## 方法一:取模
 循环通过对10取模得到尾部数字，一步步乘10构造新的翻转后的整数即可。然而要注意首先判断原数字的正负，最后还要判断结果是否溢出。
 
 ```python
@@ -84,7 +87,7 @@ class Solution:
 解释: 从右向左读, 为 01 。因此它不是一个回文数。
 ```
 
-## 方法：转成字符串
+## 方法一：转成字符串
 ```python
 class Solution:
     def isPalindrome(self, x: int) -> bool:
@@ -94,6 +97,28 @@ class Solution:
         for i in range(N//2):
             if x[i] != x[N-1-i]:
                 return False
+        return True
+```
+
+## 方法二：数学除余+取模
+借助一个与x同等位数的变量`help`（首位1，其余位0），通过循环：
+1. 找到`x`的最高位`x//help`和最低位`x%10`，进行比较，
+2. 去掉`x`两头的数字`(x%help)//10`。help变量同步修改去掉两个0。 `help/=100`。
+
+```python
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0: return False
+        
+        help=1
+        while x//help >= 10:
+            help *= 10
+        
+        while x!=0:
+            if x//help != x%10:
+                return False
+            x = (x%help)//10
+            help /= 100
         return True
 ```
 
@@ -195,6 +220,7 @@ class Solution:
         return res
 ```
 执行用时有点长。
+
 
 
 
