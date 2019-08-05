@@ -1,5 +1,5 @@
 ---
-title: 用python刷LeetCode数组题(简单级)(一)
+title: python解LeetCode数组题(简单)(1)
 date: 2019-02-22
 categories: 
 		- Algorithm
