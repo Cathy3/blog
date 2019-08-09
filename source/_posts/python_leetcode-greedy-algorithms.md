@@ -1,5 +1,5 @@
 ---
-title: python刷leetcode贪心算法
+title: python解leetcode贪心算法
 date: 2019-07-4
 categories: 
 	-   Algorithm

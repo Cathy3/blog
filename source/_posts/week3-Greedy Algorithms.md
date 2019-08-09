@@ -2,11 +2,12 @@
 title: 贪心算法
 date: 2018-10-24
 categories: 
-		- Algorithm
+	-   Algorithm
 tags:  
-		- python
-		- Algorithm
-        - 背包问题
+	-   python
+	-   Algorithm
+    -   背包问题
+    
 mathjax: true
 ---
 # 概述

@@ -13,17 +13,10 @@ mathjax: true
 
 **学习目标：**
 
--    实现有向图、无向图、有权图、无权图的邻接矩阵和邻接表表示方法
--    实现图的深度优先搜索、广度优先搜索
-实现 Dijkstra 算法、A* 算法
-实现拓扑排序的 Kahn 算法、DFS 算法
-对应的 LeetCode 练习题
-200 Number of Islands（岛屿的个数）
-英文版：https://leetcode.com/problems/number-of-islands/description/
-中文版：https://leetcode-cn.com/problems/number-of-islands/description/
-Valid Sudoku（有效的数独）
-英文版：https://leetcode.com/problems/valid-sudoku/
-中文版：https://leetcode-cn.com/problems/valid-sudoku/
+-   实现有向图、无向图、有权图、无权图的邻接矩阵和邻接表表示方法
+-   实现图的深度优先搜索、广度优先搜索、A* 算法
+-   leetCode36.有效的数独
+-   leetCode200.岛屿的数量
 
 <!-- more -->
 
@@ -207,6 +200,94 @@ def dfs(graph, start):
 
 
 dfs(GRAPH, 'A')  # A B C I D G F E H
+```
+
+
+
+
+# 36.有效的数独
+[Valid Sudoku](https://leetcode-cn.com/problems/valid-sudoku)
+判断一个 9x9 的数独是否有效。只需要根据以下规则，验证已经填入的数字是否有效即可。
+
+数字 1-9 在每一行只能出现一次。
+数字 1-9 在每一列只能出现一次。
+数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。
+
+## 方法
+如果只判断有效的话，实现三个函数分别对应三个条件即可：判断行，判断列，判断9宫格。
+
+把要判断的这些位置的数字取出来，然后用set后的长度是否等于原长度就能知道是不是有重复数字了。题目中已经说了给出的数字只有1~9，所以省掉了很多事。判断之前需要把’.‘给去掉，因为数字只允许出现一次，而’.'可能出现多次。
+
+时间复杂度是O(N^2)，空间复杂度是O(N).
+
+```python
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        n = len(board)
+        return self.isValidRow(n, board) and self.isValidCol(n, board) and self.isValidNineCell(n, board)
+    
+    def isValidRow(self, n, board):
+        for r in range(n):
+            row = [x for x in board[r] if x !='.']
+            if len(set(row)) != len(row):
+                return False
+        return True
+    
+    def isValidCol(self, n, board):
+        for c in range(n):
+            col = [board[r][c] for r in range(n) if board[r][c] != '.']
+            if len(set(col)) != len(col):
+                return False
+        return True
+    
+    def isValidNineCell(self, n, board):
+        for r in range(0, n, 3):
+            for c in range(0, n, 3):
+                cell = []
+                for i in range(3):
+                    for j in range(3):
+                        num = board[r+i][c+j]
+                        if num != '.':
+                            cell.append(num)
+                if len(set(cell)) != len(cell):
+                    return False
+        return True
+```
+
+# 200.岛屿的数量
+给定一个由 '1'（陆地）和 '0'（水）组成的的二维网格，计算岛屿的数量。一个岛被水包围，并且它是通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设网格的四个边均被水包围。
+
+示例 1:
+```
+输入:
+11110
+11010
+11000
+00000
+
+输出: 1
+```
+## 方法:DFS
+
+```python
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        res = 0
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == '1':
+                    self.dfs(grid, r, c)
+                    res += 1
+        return res
+    
+    def dfs(self, grid, i, j):
+        dirs = [[-1,0], [0,1], [0,-1], [1,0]]
+        grid[i][j] = '0'
+        for dir in dirs:
+            nr, nc = i+dir[0], j+dir[1]
+            if nr>=0 and nc>=0 and nr<len(grid) and nc<len(grid[0]):
+                if grid[nr][nc]=='1':
+                    self.dfs(grid, nr, nc)
 ```
 
 # 参考

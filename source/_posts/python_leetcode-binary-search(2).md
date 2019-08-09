@@ -1,5 +1,5 @@
 ---
-title: python刷LeetCode二分查找题(简单级)
+title: python解LeetCode二分查找(2)
 date: 2019-06-10
 categories: 
 		- Algorithm
@@ -8,6 +8,7 @@ tags:
         - LeetCode
         - 二分查找
 ---
+在leetcode中属于简单级别的题目。
    
 -   278. 第一个错误的版本
 -   33. 搜索旋转排序数组
@@ -54,7 +55,7 @@ class Solution:
         return left
 ```
 
-## 33. 搜索旋转排序数组 
+# 33. 搜索旋转排序数组 
 假设按照升序排序的数组在预先未知的某个点上进行了旋转。
 
 ( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。

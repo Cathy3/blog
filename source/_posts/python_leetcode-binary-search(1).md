@@ -1,5 +1,5 @@
 ---
-title: 二分查找算法
+title: python解LeetCode二分查找(1)
 date: 2019-03-06
 categories: 
 	-   Algorithm

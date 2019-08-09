@@ -1,5 +1,5 @@
 ---
-title: python实现数据结构之二叉树
+title: python解leetcode二叉树(1)
 date: 2019-03-09
 categories: 
 	-   Algorithm
@@ -29,8 +29,6 @@ mathjax: true
 -   LeetCode 98. 验证二叉搜索树
 -   LeetCode 103. 二叉树的锯齿形层次遍历
 -   LeetCode 226. 翻转二叉树
--   LeetCode 104. 二叉树的最大深度
--   LeetCode 112. 路径总和
  
 <!-- more -->
 
@@ -829,7 +827,7 @@ class Solution:
         return res == sorted(res) and len(res) == len(set(res))
 ```
 
-# 方法二：递归
+## 方法二：递归
 左子树的值要在(min,mid)之间，右子树的值在(mid,max)之间，这个mid值并不是中位数而是当前节点的值。
 
 定义一个辅助函数，
@@ -901,146 +899,6 @@ class Solution:
             if node.right:
                 stack.append(node.right)
         return root
-```
-
-# 二叉树的最大深度
-[LeetCode 104. Maximum Depth of Binary Tree](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/)
-
-给定一个二叉树，找出其最大深度。
-
-二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
-
-说明: 叶子节点是指没有子节点的节点。
-
-示例：
-给定二叉树 [3,9,20,null,null,15,7]，
-```
-    3
-   / \
-  9  20
-    /  \
-   15   7
-```
-返回它的最大深度 3 。
-
-## 方法一：深度优先搜索
-深度优先搜索（DFS），递归求解。
-```python
-class Solution:
-    def maxDepth(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
-```
-
-## 方法二：广度优先搜索
-广度优先搜索（BFS），利用队列求解。
-```python
-class Solution:
-    def maxDepth(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        
-        depth = 0
-        q = [root]
-        while len(q) != 0:
-            depth += 1
-            for _ in range(len(q)):
-                if q[0].left:
-                    q.append(q[0].left)
-                if q[0].right:
-                    q.append(q[0].right)
-                del q[0]
-        return depth
-```
-
-# 路径总和
-[LeetCode 112. Path Sum](https://leetcode-cn.com/problems/path-sum/)
-
-给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。
-
-说明: 叶子节点是指没有子节点的节点。
-
-示例: 
-给定如下二叉树，以及目标和 sum = 22，
-```
-              5
-             / \
-            4   8
-           /   / \
-          11  13  4
-         /  \      \
-        7    2      1
-```
-返回 true, 因为存在目标和为 22 的根节点到叶子节点的路径 5->4->11->2。
-
-## 方法一：DFS + 递归
-用深度优先搜索（DFS）遍历所有可能的从根到叶的路径，要注意每深一层要从和中减去相应节点的数值。下面是递归实现的代码。
-```python
-class Solution:
-    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
-        if not root:
-            return False
-        if root.left or root.right:
-            return self.hasPathSum(root.left, sum-root.val) or self.hasPathSum(root.right, sum-root.val)
-        else:
-            return True if sum == root.val else False
-```
-
-## 方法二：DFS + 栈
-DFS的非递归实现，用栈实现。
-```python
-class Solution:
-    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
-        stack = [(root, sum)]
-        while len(stack) != 0:
-            node, tmp_sum = stack.pop()
-            if node:
-                if not node.left and not node.right and node.val == tmp_sum:
-                    return True
-                stack.append((node.right, tmp_sum-node.val))
-                stack.append((node.left, tmp_sum-node.val))
-        return False
-```
-## 方法三：BFS + 队列
-```python
-class Solution:
-    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
-        queue = [(root, sum)]
-        while len(queue) != 0:
-            node, tmp_sum = queue.pop()
-            if node:
-                if not node.left and not node.right and node.val == tmp_sum:
-                    return True
-                queue.insert(0, (node.right, tmp_sum-node.val))
-                queue.insert(0, (node.left, tmp_sum-node.val))
-        return False
-```
-
-## 方法四：后序遍历 + 栈
-直接将路径保存在栈中，每次进入不同的层不需要记录当前的和
-```python
-class Solution:
-    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
-        pre, cur = None, root
-        tmp_sum = 0
-        stack = []
-        while cur or len(stack) > 0:
-            while cur:
-                stack.append(cur)
-                tmp_sum += cur.val
-                cur = cur.left   # 最左子树
-            cur = stack[-1]
-            if not cur.left and not cur.right and tmp_sum == sum:
-                return True
-            if cur.right and pre != cur.right:
-                cur = cur.right # 右子树
-            else:
-                pre = cur
-                stack.pop()  # 左子树
-                tmp_sum -= cur.val
-                cur = None
-        return False
 ```
 
 # 参考
