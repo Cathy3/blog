@@ -1,5 +1,5 @@
 ---
-title: 动态规划 
+title: python解leetcode动态规划(1)
 date: 2019-04-05
 categories: 
 	    -   Algorithm
@@ -10,6 +10,8 @@ tags:
         -   动态规划
 mathjax: true
 ---
+动态规划主要方法是画网格⭐。
+
 1.  递归 + 记忆化 ——> 递推（动态规划）
 2.  状态的定义：数组 opt[n], dp[n], fib[n] 
 3.  状态转移方程：opt[n] = best_of(opt[n-1], opt[n-2], ...) 从前面的n-1个值得到最优的第n个值
@@ -22,6 +24,8 @@ mathjax: true
 -   0-1 背包问题
     -   自我实现
     -   Palindrome Partitioning II(132)
+-   62. 不同路径
+-   63. 不同路径 II
 -   [LeetCode 64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
 -   编程实现莱文斯坦最短编辑距离
     -   [LeetCode 72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
@@ -109,6 +113,84 @@ class Solution:
         for i in range(n):
             prev, current = current, prev + current
         return current
+```
+
+
+# 62. 不同路径
+一个机器人位于一个 m x n 网格的左上角。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+
+问总共有多少条不同的路径？
+示例 1:
+```
+输入: m = 3, n = 2
+输出: 3
+解释:
+从左上角开始，总共有 3 条路径可以到达右下角。
+1. 向右 -> 向右 -> 向下
+2. 向右 -> 向下 -> 向右
+3. 向下 -> 向右 -> 向右
+```
+
+## 方法
+每一格子都是左边和上边之和
+```python
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        grid = [[0]*n for _ in range(m)]
+        for i in range(n):
+            grid[0][i] = 1
+        for i in range(m):
+            grid[i][0] = 1
+        for i in range(1,m):
+            for j in range(1,n):
+                grid[i][j] = grid[i][j-1] + grid[i-1][j]
+        return grid[m-1][n-1]
+```
+
+# 63. 不同路径 II
+一个机器人位于一个 m x n 网格的左上角。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+
+现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
+
+示例 1:
+```
+输入:
+[
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]
+输出: 2
+解释:
+3x3 网格的正中间有一个障碍物。
+从左上角到右下角一共有 2 条不同的路径：
+1. 向右 -> 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右 -> 向右
+```
+
+## 方法
+```python
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        m, n = len(obstacleGrid), len(obstacleGrid[0])
+        dp = [[0]*n for _ in range(m)]
+        if obstacleGrid[0][0] == 0:
+            dp[0][0] = 1
+        
+        for i in range(m):
+            for j in range(n):
+                if obstacleGrid[i][j] == 1:
+                    dp[i][j] = 0
+                else:
+                    if i!=0:#不是最上面一行
+                        dp[i][j] += dp[i-1][j]
+                    if j!=0:
+                        dp[i][j] += dp[i][j-1]
+        return dp[m-1][n-1]
 ```
 
 # 64. 最小路径和
@@ -256,6 +338,9 @@ B: [3,2,1,4,7]
 
 ## 方法:动态规划
 是找到当前节点之前连续的公共子串长度问题。
+
+画格子：横纵坐标分别是A和B，对应比较，相等时，格子为1，或者左上角的数+1。
+
 
 状态转移就2种，要么上一个匹配成功，要么这一个匹配成功，其他情况都为0。
 

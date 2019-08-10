@@ -17,6 +17,7 @@ mathjax: true
 -   111. 二叉树的最小深度
 -   112. 路径总和 (找出树的两个节点之间的最长距离)
 -   113. 路径总和 II （找出和为某一值的路径）
+-   437. 路径总和 III
 -   129. 求根到叶子节点数字之和（找所有路径）
 -   257. 二叉树的所有路径  
 -   543. 二叉树的直径
@@ -349,6 +350,54 @@ class Solution:
             self.dfs(root.right,target,res,path[:])
         path.pop(-1) # 回溯
 ```
+
+# 437. 路径总和 III
+给定一个二叉树，它的每个结点都存放着一个整数值。
+
+找出路径和等于给定数值的路径总数。
+
+路径不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+
+二叉树不超过1000个节点，且节点数值范围是 [-1000000,1000000] 的整数。
+
+示例：
+```
+root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
+
+      10
+     /  \
+    5   -3
+   / \    \
+  3   2   11
+ / \   \
+3  -2   1
+
+返回 3。和等于 8 的路径有:
+
+1.  5 -> 3
+2.  5 -> 2 -> 1
+3.  -3 -> 11
+```
+
+## 方法
+
+```python
+class Solution:
+    def pathSum(self, root: TreeNode, sum: int) -> int:
+        if not root:return 0
+        return self.dfs(root, sum) + self.pathSum(root.left, sum) + self.pathSum(root.right, sum)
+    
+    def dfs(self, root, sum):
+        res = 0
+        if not root:return res
+        sum -= root.val
+        if sum == 0:
+            res += 1
+        res += self.dfs(root.left, sum)
+        res += self.dfs(root.right, sum)
+        return res
+```
+
 
 
 # 129. 求根到叶子节点数字之和
