@@ -1,5 +1,5 @@
 ---
-title: 用python刷LeetCode链表题(中等级)
+title: python解LeetCode链表(3)
 date: 2019-04-05
 categories: 
 		- Algorithm

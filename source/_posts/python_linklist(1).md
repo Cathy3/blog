@@ -1,5 +1,5 @@
 ---
-title: python实现数据结构中的链表
+title: python解LeetCode链表(1)
 date: 2019-02-28
 categories: 
 		- Algorithm
