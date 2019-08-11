@@ -1,5 +1,5 @@
 ---
-title: python解LeetCode数组题(简单)(1)
+title: python解LeetCode数组(1)
 date: 2019-02-22
 categories: 
 		- Algorithm

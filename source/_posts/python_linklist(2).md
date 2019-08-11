@@ -10,7 +10,9 @@ tags:
 ---
 **练习题目：**
 
--   21. 合并两个有序链表
+-   合并有序链表
+    -   21. 合并两个有序链表
+    -   23. 合并K个排序链表
 -   83. 删除排序链表中的重复元素
 -   141. 环形链表
 -   160. 相交链表
@@ -69,6 +71,53 @@ class Solution:
         cur.next = l1 or l2
         return head.next
 ```
+# 23.合并K个排序链表
+合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。
+
+示例:
+```
+输入:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+输出: 1->1->2->3->4->4->5->6
+```
+
+## 方法
+把问题简化为merge2的问题，这种思路可以每次递归值归并前两个，或是或是每次把相邻的两个都归并了，后者的栈的深度要更小。
+```python
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if not lists: return
+        amount = len(lists)
+        interval = 1
+        while interval < amount:
+            for i in range(0, amount - interval, interval * 2):
+                lists[i] = self.merge2Lists(lists[i], lists[i + interval])
+            interval *= 2
+        return lists[0]
+
+    def merge2Lists(self, l1, l2):
+        head = point = ListNode(0)
+        while l1 and l2:
+            if l1.val <= l2.val:
+                point.next = l1
+                l1 = l1.next
+            else:
+                point.next = l2
+                l2 = l1
+                l1 = point.next.next
+            point = point.next
+        if not l1:
+            point.next=l2
+        else:
+            point.next=l1
+        return head.next
+```
+
+
 # 83. 删除排序链表中的重复元素
 [Remove Duplicates from Sorted List](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
