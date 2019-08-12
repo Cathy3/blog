@@ -1,5 +1,5 @@
 ---
-title: python刷leetcode字符串(1)
+title: python解leetcode字符串(2)
 date: 2019-07-2
 categories: 
 	-   Algorithm
@@ -12,6 +12,7 @@ mathjax: true
 ---
 
 -   38. 报数
+-   43. 字符串相乘
 -   58. 最后一个单词的长度
 -   67. 二进制求和
 -   125. 验证回文串
@@ -72,6 +73,50 @@ class Solution:
                     count = 1
             res = ans + str(count) + str(pre) # 拼接j循环的最后一个字符
         return res                       
+```
+
+# 43. 字符串相乘
+给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+
+示例 1:
+```
+输入: num1 = “2”, num2 = “3”
+输出: “6”
+```
+示例 2:
+```
+输入: num1 = “123”, num2 = “456”
+输出: “56088”
+```
+说明：
+
+-   num1 和 num2 的长度小于110。
+-   num1 和 num2 只包含数字 0-9。
+-   num1 和 num2 均不以零开头，除非是数字 0 本身。
+-   不能使用任何标准库的大数类型（比如 BigInteger）或直接将输入转换为整数来处理。
+
+## 方法
+按乘法运算的方式来实现
+
+```python
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        res = [0] * (len(num1) + len(num2))  # 初始化，存放乘积的数组
+        pos = len(res) - 1
+
+        for n1 in reversed(num1):
+            tempPos = pos
+            for n2 in reversed(num2):
+                res[tempPos] += int(n1) * int(n2)
+                res[tempPos - 1] += res[tempPos] // 10  # 进位
+                res[tempPos] %= 10  # 取余
+                tempPos -= 1
+            pos -= 1
+
+        st = 0
+        while st < len(res) - 1 and res[st] == 0:  # 统计前面有几个0
+            st += 1
+        return ''.join(map(str, res[st:]))  # 去掉0，变成字符串
 ```
 
 # 58. 最后一个单词的长度

@@ -1,6 +1,6 @@
 
 ---
-title: python实现数据结构之字符串
+title: python解leetcode字符串(1)
 date: 2019-03-08
 categories: 
 	-   Algorithm
@@ -15,9 +15,10 @@ mathjax: true
 
 -   实现一个字符集，只包含 a～z 这 26 个英文字母的 Trie 树 
 -   实现朴素的字符串匹配算法 
--   LeetCode 344. 反转字符串
--   LeetCode 151. 翻转字符串里的单词
--   LeetCode 8. 字符串转换整数 (atoi)
+-   344. 反转字符串
+-   151. 翻转字符串里的单词
+-   557. 反转字符串中的单词 III
+-   8. 字符串转换整数 (atoi)
 
 <!-- more -->
 
@@ -240,6 +241,32 @@ class Solution:
         lst.reverse()
         return " ".join(lst)
 ```
+
+# 557. 反转字符串中的单词 III
+给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
+
+示例 1:
+```
+输入: "Let's take LeetCode contest"
+输出: "s'teL ekat edoCteeL tsetnoc" 
+注意：在字符串中，每个单词由单个空格分隔，并且字符串中不会有任何额外的空格。
+1
+2
+3
+```
+
+# 方法
+使用split与内置函数逆置
+```python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        l = s.split()
+        k = []
+        for i in l:
+            k.append(i[::-1])
+        return " ".join(k)
+```
+
 
 # LeetCode 8. 字符串转换整数 (atoi)
 [字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
