@@ -10,7 +10,8 @@ tags:
         -   字符串
 mathjax: true
 ---
-
+-   5. 最长回文子串
+-   14. 最长公共前缀
 -   38. 报数
 -   43. 字符串相乘
 -   58. 最后一个单词的长度
@@ -18,7 +19,119 @@ mathjax: true
 -   125. 验证回文串
 -   345. 反转字符串中的元音字母
 -   383. 赎金信
+
 <!-- more -->
+
+# 5. 最长回文子串
+[最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+
+示例 1：
+```
+输入: “babad”
+输出: “bab”
+注意: “aba” 也是一个有效答案。
+```
+示例 2：
+```
+输入: “cbbd”
+输出: “bb”
+```
+
+## 方法：马拉车算法
+马拉车算法(Manacher’s algorithm)是用来查找一个字符串的最长回文子串的线性方法，由一个叫Manacher的人在1975年发明的，这个方法的最大贡献是在于将时间复杂度提升到了线性，这是非常了不起的。
+
+思路：
+
+1.  对字符串进行预处理，两个字符之间加上特殊符号 #
+2.  用一个列表 P 来记录以每个字符 i 为中心的回文长度，
+3.  遍历整个字符串：
+    1.  比较 若 i 小于最右边界：那就找它相对i的对称位置，得出回文长度，要是对称位置的回文长度更长，则选择更小的 右边界-i,
+    2.  否则 P[i] 就取为0
+    3.  +1循环，扩展探索 i 的边界
+    4.  如果它的边界超过右边界，则取而代之
+4.  最后取得最长回文。
+
+```python
+class Solution:
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        def preProcess(s):
+            if not s:
+                return ['^', '$']
+            T = ['^']
+            for c in s:
+                T += ['#', c]
+            T += ['#', '$']
+            return T
+        
+        T = preProcess(s)
+        P = [0] * len(T)
+        center, right = 0, 0
+        for i in range(1, len(T)-1):
+            i_mirror = 2 * center-i
+            if right > i:
+                P[i] = min(right-i, P[i_mirror])
+            else:
+                P[i] = 0
+            
+            while T[i + 1 + P[i]] == T[i - 1 - P[i]]:
+                P[i] += 1
+            
+            if i + P[i] > right:
+                center, right = i, i+P[i]
+        max_i = 0
+        for i in range(1, len(T)-1):
+            if P[i] > P[max_i]:
+                max_i = i
+        start = round((max_i - 1 - P[max_i]) / 2)
+        return s[start : start + P[max_i]]
+```
+Time Complexity: O(n)
+
+Auxiliary Space: O(n) 
+
+
+# 14. 最长公共前缀
+编写一个函数来查找字符串数组中的最长公共前缀。
+
+如果不存在公共前缀，返回空字符串 “”。
+
+示例 1:
+```
+输入: [“flower”,“flow”,“flight”]
+输出: “fl”
+```
+示例 2:
+```
+输入: [“dog”,“racecar”,“car”]
+输出: “”
+解释: 输入不存在公共前缀。
+```
+说明:所有输入只包含小写字母 a-z 。
+
+## 方法：用 zip() 和 set() 函数
+如果`set()`的长度大于1，则返回当前的最长公共前缀。`enumerate(zip(*strs))` 返回每个单词的字符序号和元组。
+
+```python
+class Solution:
+    def longestCommonPrefix(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: str
+        """
+        if not strs:
+            return ""
+        for i, letter_group in enumerate(zip(*strs)):
+            if len(set(letter_group)) > 1:
+                return strs[0][:i]
+        return min(strs)
+```
+Time Complexity: O(n) 
 
 # 38. 报数
 报数序列是一个整数序列，按照其中的整数的顺序进行报数，得到下一个数。其前五项如下：
@@ -274,3 +387,6 @@ class Solution:
                 return False
         return True
 ```
+
+# 参考
+-   [LeetCode003:最长回文字符-老表Pro](https://blog.csdn.net/qq_39241986/article/details/82927399)

@@ -9,11 +9,110 @@ tags:
         - 数组
 ---
 
+-   4. 寻找两个有序数组的中位数
 -   11. 盛最多水的容器
 -   54. 螺旋矩阵
 -   59. 螺旋矩阵 II
+-   136. 只出现一次的数字
 -   977. 有序数组的平方
+-   240. 搜索二维矩阵 II
 <!-- more -->
+
+# 4. 寻找两个有序数组的中位数
+[寻找两个有序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
+
+给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。
+
+请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m+n))。
+
+你可以假设 nums1 和 nums2 不会同时为空。
+
+示例 1:
+```
+nums1 = [1, 3]
+nums2 = [2]
+则中位数是 2.0
+```
+示例 2:
+```
+nums1 = [1, 2]
+nums2 = [3, 4]
+则中位数是 (2 + 3)/2 = 2.5
+```
+
+## 方法一：合并，排序，除以2
+对于一个有序数组，如果数组长度是奇数，那么中位数就是中间那个值，如果长度是偶数，就是中间两个数的平均数。
+```python
+class Solution:
+    def findMedianSortedArrays(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: float
+        """
+        tmp = nums1 + nums2
+        tmp.sort()
+        if len(tmp)%2==1:
+            return tmp[int(len(tmp)/2)]
+        else:
+            return (tmp[int(len(tmp)/2)-1] + tmp[int(len(tmp)/2)])/2.0
+```
+
+Time Complexity: O(n) 
+
+大于题目要求的时间复杂度
+
+## 方法二：寻找划分位置
+中位数的作用：将一个集合划分为两个长度相等的子集，其中一个子集中的元素总是大于另一个子集中的元素。
+
+思路：nums1和nums2分别以i,j为界划分成左右两部分，不断调整i,j,以达成以下条件：
+
+1.  len(nums1_左) + len(nums2_左) = len(nums1_右) + len(nums2_右) 就是说，划分后的左右两边的长度相等。
+2.  Max(nums1左、nums2左) ≤ Min(nums1右、nums2右) 就是说，左边的元素总是小于右边。
+
+```python
+class Solution:
+    def findMedianSortedArrays(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: float
+        """
+        m, n = len(nums1), len(nums2)
+        if m > n:
+            nums1, nums2, m, n = nums2, nums1, n, m
+        if n == 0:
+            raise ValueError
+            
+        imin, imax, half_len = 0, m, (m+n+1)//2
+        while imin <= imax:
+            i = (imin + imax)//2
+            j = half_len - i
+            if i<m and nums2[j-1] > nums1[i]: #i太小
+                imin = i+1
+            elif i>0 and nums1[i-1]>nums2[j]: #i太大
+                imax = i-1
+            else:#找到i的正确位置
+                if i==0: max_of_left = nums2[j-1]#临界问题，其中一个列表全在右边，左边为空
+                elif j==0: max_of_left = nums1[i-1]
+                else: max_of_left = max(nums1[i-1], nums2[j-1])
+                    
+                if(m+n)%2 == 1: #若列表长度为奇数
+                    return max_of_left
+                
+                if i==m: min_of_right = nums2[j] #临界问题，其中一个列表全在左边，右边为空
+                elif j==n: min_of_right = nums1[i]
+                else: min_of_right = min(nums1[i], nums2[j])
+                    
+                return (max_of_left + min_of_right)/2
+```
+
+Time Complexity: O(log(min(m,n))) 
+
+首先，查找的区间是 [0,m]。 而该区间的长度在每次循环之后都会减少为原来的一半。 所以，我们只需要执行 \log(m) 次循环。由于我们在每次循环中进行常量次数的操作，所以时间复杂度为 O(log(m)) 。 
+
+由于 m≤n，所以时间复杂度是 O(log(min(m,n)))。空间复杂度：O(1)， 我们只需要恒定的内存来存储 9 个局部变量， 所以空间复杂度为 O(1)。
+
 
 # 11. 盛最多水的容器
 [Container With Most Water](https://leetcode-cn.com/problems/container-with-most-water/)
@@ -193,6 +292,34 @@ class Solution:
         return res
 ```
 
+# 136. 只出现一次的数字
+给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+
+说明：你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
+
+示例 :
+```
+输入: [4,1,2,1,2]
+输出: 4
+```
+## 方法一：异或位运算
+异或运算是可以交换顺序的运算，也就是说和元素的排列顺序无关，自己异或自己等于0,0异或别人等于别人。
+```python
+from functools import reduce
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        return reduce(lambda x, y: x^y, nums)
+```
+## 方法二：字典
+使用Counter直接求只出现一次的数字即可
+```python
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        count = collections.Counter(nums)
+        return count.most_common()[-1][0]
+```
+
+
 # 977. 有序数组的平方
 给定一个按非递减顺序排序的整数数组 A，返回每个数字的平方组成的新数组，要求也按非递减顺序排序。
 
@@ -252,6 +379,107 @@ class Solution:
         return sorted(x*x for x in A)
 ```        
 Time Complexity: O(nlogn) O(nlogn)O(nlogn)
+
+
+# 240. 搜索二维矩阵 II
+编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target。该矩阵具有以下特性：
+
+每行的元素从左到右升序排列。
+每列的元素从上到下升序排列。
+示例:
+```
+现有矩阵 matrix 如下：
+[
+  [1,   4,  7, 11, 15],
+  [2,   5,  8, 12, 19],
+  [3,   6,  9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30]
+]
+给定 target = 5，返回 true。
+
+给定 target = 20，返回 false。
+```
+
+## 方法
+这个题在剑指offer有详细解释。方法是从右上角向左下角进行遍历，根据比较的大小决定向下还是向左查找。
+
+剑指offer的解释是我们从矩阵的左下角或者右上角开始遍历，这样知道了比较的结果是大还是小，就知道了对应的前进方向。
+```python
+class Solution:
+    def searchMatrix(self, matrix, target):
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+        if not matrix or not matrix[0]:
+            return False
+        rows = len(matrix)
+        cols = len(matrix[0])
+        row, col = 0, cols-1 #从右上角开始
+        while True:
+            if row < rows and col >= 0:
+                if matrix[row][col] == target:
+                    return True
+                elif matrix[row][col] < target:
+                    row += 1
+                else:
+                    col -= 1
+            else:
+                return False
+```
+
+# 74. 搜索二维矩阵
+编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+
+每行中的整数从左到右按升序排列。
+每行的第一个整数大于前一行的最后一个整数。
+示例 1:
+```
+输入:
+matrix = [
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+target = 3
+输出: true
+```
+## 方法一
+这个题目是240题的一个特例，所以可以直接使用240题的代码就能通过。方法是从矩阵的左下角或者右上角开始遍历。
+
+这个题在剑指offer有详细解释。方法是从右上角向左下角进行遍历，根据比较的大小决定向下还是向左查找。
+
+```python
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        if not matrix or not matrix[0]:
+            return False
+        rows = len(matrix)
+        cols = len(matrix[0])
+        row, col = 0, cols-1 #从右上角开始
+        while True:
+            if row < rows and col >= 0:
+                if matrix[row][col] == target:
+                    return True
+                elif matrix[row][col] < target:
+                    row += 1
+                else:
+                    col -= 1
+            else:
+                return False  
+```
+
+## 方法二：库函数
+使用库函数也可以哦，不过库函数都是针对一维数组的查找，所以我们需要把给出的数组变成一维的。在numpy中有reshape函数，幸运的是，leetcode支持Numpy.
+```python
+import numpy as np
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        matrix = np.reshape(matrix, [1, -1])
+        return target in matrix    
+```
 
 # 参考
 -   [LeetCode：977. Squares of a Sorted Array - Python](https://blog.csdn.net/xx_123_1_rj/article/details/86568877)

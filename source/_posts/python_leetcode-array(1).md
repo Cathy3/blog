@@ -12,13 +12,11 @@ tags:
 数组是一种基本的数据结构，占据一块连续的内存，并按照顺序存储数据。
 
 创建数组时，需要首先指定数组的容量大小，然后根据大小分配内存。
--   1. 两数之和
 -   26. 删除排序数组中的重复项
 -   27. 移除元素
 -   35. 搜索插入位置
 -   53. 最大子序和
 -   66. 加一
--   88. 合并两个有序数组
 -   118. 杨辉三角
 -   119. 杨辉三角 II
 -   121. 买卖股票的最佳时机
@@ -26,43 +24,6 @@ tags:
 -   167. 两数之和 II - 输入有序数组
 <!-- more -->
 
-# 1. 两数之和
-[Two Sum](https://leetcode-cn.com/problems/two-sum/)
-
-## 题目描述
-给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那**两个**整数，并返回他们的数组下标。
-
-你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
-
-
-
-**示例:**
-```
-给定 nums = [2, 7, 11, 15], target = 9
-因为 nums[0] + nums[1] = 2 + 7 = 9
-所以返回 [0, 1]
-```
-## 方法：字典
-利用python中的字典记录记录下每个元素出现的位置。key记差值，value记已有数值的位置。
-
-```python
-class Solution(object):
-    def twoSum(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: List[int]
-        """
-        
-        dic = dict()
-        
-        for index,value in enumerate(nums):
-            sub = target - value
-            if sub in dic:
-                return [dic[sub], index]
-            else:
-                dic[value]=index
-```
 
 # 26. 删除排序数组中的重复项
 [Remove Duplicates from Sorted Array](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
@@ -293,7 +254,6 @@ class Solution:
 # 66. 加一
 [Plus One](https://leetcode-cn.com/problems/plus-one/)
 
-## 题目描述
 给定一个由整数组成的非空数组所表示的非负整数，在该数的基础上加一。
 
 最高位数字存放在数组的首位， 数组中每个元素只存储一个数字。
@@ -346,51 +306,7 @@ class Solution:
             sum = sum*10+i
         return [int(i) for i in str(sum+1)]
 ```
-# 88. 合并两个有序数组
-[Merge Sorted Array](https://leetcode-cn.com/problems/merge-sorted-array/)
 
-## 题目描述
-给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
-
-说明:
-- 初始化 nums1 和 nums2 的元素数量分别为 m 和 n。
-- 你可以假设 nums1 有足够的空间（空间大小大于或等于 m + n）来保存 nums2 中的元素。
-
-**示例:**
-
-> 输入:
-
-> nums1 = [1,2,3,0,0,0], m = 3
-
-> nums2 = [2,5,6],       n = 3
-
-> 输出: [1,2,2,3,5,6]
-
-## 方法：遍历比较，大的放最后
-从后往前遍历两个数组，然后把对应的元素放在数组1对应的位置，
-
-注意：最后我们只需判断数组2有没有遍历完即可，因为数组1没有遍历完的话，它已经是按顺序放在前面的了
-```python
-class Solution(object):
-    def merge(self, nums1, m, nums2, n):
-        """
-        :type nums1: List[int]
-        :type m: int
-        :type nums2: List[int]
-        :type n: int
-        :rtype: void Do not return anything, modify nums1 in-place instead.
-        """
-        
-        while m>0 and n>0:
-            if nums1[m-1] > nums2[n-1]:
-                nums1[m+n-1] = nums1[m-1]
-                m -= 1
-            else:
-                nums1[m+n-1] = nums2[n-1]
-                n -= 1
-        if n>0:
-            nums1[:n] = nums2[:n]
-```
 # 118. 杨辉三角
 [Pascal's Triangle](https://leetcode-cn.com/problems/pascals-triangle/)
 
