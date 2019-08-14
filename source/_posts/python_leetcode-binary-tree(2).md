@@ -17,6 +17,7 @@ mathjax: true
 -   111. 二叉树的最小深度
 -   112. 路径总和 (找出树的两个节点之间的最长距离)
 -   113. 路径总和 II （找出和为某一值的路径）
+-   124. 二叉树中的最大路径和
 -   437. 路径总和 III
 -   129. 求根到叶子节点数字之和（找所有路径）
 -   257. 二叉树的所有路径  
@@ -350,6 +351,58 @@ class Solution:
             self.dfs(root.right,target,res,path[:])
         path.pop(-1) # 回溯
 ```
+
+# 124. 二叉树中的最大路径和
+给定一个非空二叉树，返回其最大路径和。
+
+本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径至少包含一个节点，且不一定经过根节点。
+
+示例 1:
+```
+输入: [1,2,3]
+
+       1
+      / \
+     2   3
+
+输出: 6
+```
+示例 2:
+```
+输入: [-10,9,20,null,null,15,7]
+
+   -10
+   / \
+  9  20
+    /  \
+   15   7
+
+输出: 42
+```
+
+## 方法:递归
+一条路径必定有一个节点最接近根节点，而该条路径的和就是这个节点的值加上它左右路径的和。我们现在要求最大路径和，那么就要分别得到左右两条路径的最大和。
+
+而左路径的最大和为左节点的值加上它左右路径中较大的路径和，右路径最大和为右节点的值加上它左右路径中较大的路径和。
+
+注意如果某条子路径的和为负，应该将该条子路径直接砍掉。
+```python
+class Solution:
+    def maxPathSum(self, root: TreeNode) -> int:
+        self.maxSum = float('-inf')
+        self._maxPathSum(root)
+        return self.maxSum
+        
+    def _maxPathSum(self,root):
+        if root is None: return 0
+        left = self._maxPathSum(root.left)
+        right = self._maxPathSum(root.right)
+        if left<0: left = 0
+        if right<0: right = 0
+        self.maxSum = max(self.maxSum, root.val + left + right)
+        return max(left, right) + root.val
+```
+
 
 # 437. 路径总和 III
 给定一个二叉树，它的每个结点都存放着一个整数值。

@@ -10,13 +10,14 @@ mathjax: true
 ---
 
 -   第 3 题：数组中重复的数字
+-   第 4 题：二维数组中的查找
 
 
 
 
 <!-- more -->
 
-# 第3题：数组中重复的数字
+# 3.数组中重复的数字
 [牛客网 online judge 地址](https://www.nowcoder.com/practice/623a5ac0ea5b4e5f95552655361ae0a8?tpId=13&tqId=11203&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
 在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中任意一个重复的数字。 
