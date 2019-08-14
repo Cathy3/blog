@@ -8,116 +8,123 @@ tags:
         - LeetCode
         - 链表
 ---
--   2. 两数相加
--   19. 删除链表的倒数第N个节点
--   24. 两两交换链表中的节点
--   61. 旋转链表
--   82. 删除排序链表中的重复元素 II
--   86. 分隔链表
+转换链表节点的位置 （穿针引线）
+
+-   206. 反转链表
 -   92. 反转链表 II
--   109. 有序链表转换二叉搜索树
-    -   (解法见 [python实现数据结构之二叉树](https://cathy3.github.io/2019/03/09/python%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%A0%91/))
--   138. [复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
--   142. [环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+-   24. 两两交换链表中的节点
+-   25. K 个一组翻转链表
+-   61. 旋转链表
+-   86. 分隔链表
 -   143. 重排链表
--   147. 对链表进行插入排序
--   148. 排序链表
--   328. 
+-   排序
+    -   147. 对链表进行插入排序
+    -   148. 排序链表（归并排序）
+-   328. 奇偶链表
+
 
 <!-- more -->
 
-# 2. 两数相加
-给出两个**非空**的链表用来表示两个非负的整数。其中，它们各自的位数是按照**逆序**的方式存储的，并且它们的每个节点只能存储**一位**数字。
+# 206.反转链表
+[Reverse Linked List](https://leetcode-cn.com/problems/reverse-linked-list/)
 
-如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+反转一个单链表。
 
-您可以假设除了数字 0 之外，这两个数都不会以 0 开头。
-
-示例：
+**示例:**
 ```
-输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
-输出：7 -> 0 -> 8
-原因：342 + 465 = 807
+输入: 1->2->3->4->5->NULL
+输出: 5->4->3->2->1->NULL
 ```
 
-## 方法：偷懒做法
-先求和，再构建链表。这个方法比较暴力。
+## 方法一：两个指针，头插法
+-   用两个指针，p指针记录的是每次的队头元素，q指针指向下一个要插入队头的元素。
+-   head帮忙指向下轮要头插的元素，待本轮指针翻转完之后要把该元素赋给q
 
 ```python
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        num1 = ''
-        num2 = ''
-        while l1:#243
-            num1 += str(l1.val)
-            l1 = l1.next
-        while l2:#564
-            num2 += str(l2.val)
-            l2 = l2.next
-        add = str(int(num1[::-1]) + int(num2[::-1]))[::-1] #342+465=807---708
-        head = ListNode(add[0])
-        res = head
-        for i in range(1,len(add)):
-            node = ListNode(add[i])
-            head.next = node
-            head = head.next
-        return res
+class Solution(object):
+    def reverseList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head:
+            return None
+        p = head  # p是指向每次的队头元素
+        q = head.next  # q是指下一个要插入队头的元素
+        while q:
+            head.next = q.next # 保留后一个要插入的元素地址
+            q.next = p # 指针反转，next为队头元素
+            p = q #q插入，作为新的队头
+            q = head.next # 重新指定下一个要插入队头的元素
+        return p
 ```
 
-# 19. 删除链表的倒数第N个节点
-给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
-
-示例：
-```
-给定一个链表: 1->2->3->4->5, 和 n = 2.
-当删除了倒数第二个节点后，链表变为 1->2->3->5.
-```
-说明：
-
-给定的 n 保证是有效的。
-
-## 方法：快慢指针
-用两个指针，一个快指针从前到后扫描整个链表，另一个慢指针的步数差n+1，那么当p指向尾部的Null时，指针q恰好指向要删除节点的前一个节点。由于可能删除头部节点，伪装一个新的头部方便操作。
+## 方法二
 
 ```python
 class Solution:
-    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        new_head = ListNode(0)
-        new_head.next = head
-        fast = slow = new_head
-        for i in range(n+1):
-            fast = fast.next
-        while fast:
-            fast = fast.next
-            slow = slow.next
-        slow.next = slow.next.next # 删除第n个
-        return new_head.next
+    def reverseList(self, head: ListNode) -> ListNode:
+        cur, prev = head, None
+        while cur:
+            # 链表反转，更新指针pre，更新指针cur
+            cur.next, prev, cur = prev, cur, cur.next
+        return prev
 ```
 
+# 92. 反转链表 II
+反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+
+说明:
+1 ≤ m ≤ n ≤ 链表长度。
+
+示例:
+```
+输入: 1->2->3->4->5->NULL, m = 2, n = 4
+输出: 1->4->3->2->5->NULL
+```
+## 方法
+翻转链表的而变形题目了。进行一遍遍历，把第m到n个元素进行翻转，即依次插入到第m个节点的头部。
+
+实际面试中细节考虑：m和n超过链表范围怎么办？ m>n怎么办？
+```python
+class Solution:
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        count = 1
+        root = ListNode(1)
+        root.next = head
+        pre = root
+        while pre.next and count<m:
+            pre = pre.next
+            count += 1
+        if count < m:
+            return head
+        
+        mNode = pre.next
+        curr = mNode.next
+        while curr and count<n:
+            Next = curr.next
+            curr.next = pre.next
+            pre.next = curr
+            mNode.next = Next
+            curr = Next
+            count += 1
+        
+        return root.next
+```
 
 # 24. 两两交换链表中的节点
 [Swap Nodes in Pairs](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
 
-## 题目描述
 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
 
 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
 
-示例:
-```
-给定 1->2->3->4, 你应该返回 2->1->4->3.
-```
+示例: 给定 1->2->3->4, 你应该返回 2->1->4->3.
 
 ## 方法
-a, b, pre 三个变量
+a, b, pre 三个指针变量
 
-```python
+```python 
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -128,11 +135,61 @@ class Solution:
     def swapPairs(self, head: ListNode) -> ListNode:
         pre, pre.next = self, head
         while pre.next and pre.next.next: #考虑奇数和偶数
-            a = pre.next 
+            a = pre.next # pre是每次要调换的两个元素的前一个元素
             b = a.next # a,b是要调换的相邻元素
             pre.next, b.next, a.next =b, a, b.next # next连线重置
-            pre = a
+            pre = a 
         return self.next
+```
+
+# 25. K 个一组翻转链表
+给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+
+k 是一个正整数，它的值小于或等于链表的长度。
+
+如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+
+示例 :
+```
+给定这个链表：1->2->3->4->5
+当 k = 2 时，应当返回: 2->1->4->3->5
+当 k = 3 时，应当返回: 3->2->1->4->5
+```
+说明 :
+
+-   你的算法只能使用常数的额外空间。
+-   你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+## 方法
+翻转函数单独写出来调用更清晰。每次k个元素翻转，再和前后两个节点连接起来。
+```python
+class Solution:
+    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+        if not head or k <= 1: 
+            return head
+        dummy = ListNode(-1) #设立链表的虚拟头结点
+        dummy.next = head
+        temp = dummy # 遍历整个链表
+        while temp:
+            temp = self.reverseNextK(temp, k)
+        return dummy.next
+    
+    
+    def reverseNextK(self, head, k):        
+        # 检查当前遍历剩余节点数是否比k小
+        temp = head
+        for _ in range(k):
+            if not temp.next:
+                return None
+            temp = temp.next
+            
+        prev, cur, tail = head, head.next, head.next
+        for _ in range(k):
+            # 链表反转，更新指针pre，更新指针cur
+            cur.next, prev, cur = prev, cur, cur.next
+        # 连接头head和尾tail
+        head.next, tail.next = prev, cur
+        return tail
 ```
 
 # 61. 旋转链表
@@ -191,48 +248,6 @@ class Solution:
         return slow
 ```
 
-# 82. 删除排序链表中的重复元素 II
-给定一个排序链表，删除所有含有重复数字的节点，只保留原始链表中 没有重复出现 的数字。
-
-示例 1:
-```
-输入: 1->2->3->3->4->4->5
-输出: 1->2->5
-```
-示例 2:
-```
-输入: 1->1->1->2->3
-输出: 2->3
-```
-## 方法
-注意审题啊，这个distinct的意思并不是去重，而是删除出现次数不止一次的。
-
-去重的可以看这个题：83. Remove Duplicates from Sorted List
-
-因此必须先遍历一遍，统计每个节点出现的次数。
-
-第二次遍历的时候，查找下个节点的值出现的次数如果不是1次，那么就删除下个节点。修改这个节点的下个指针指向下下个节点，这是指向该节点位置的指针不要动，因为还要判断新的next值。
-
-```python
-class Solution:
-    def deleteDuplicates(self, head: ListNode) -> ListNode:
-        root = ListNode(0)
-        root.next = head
-        valist = []
-        while head:
-            valist.append(head.val)
-            head = head.next
-        counter = collections.Counter(valist)
-        
-        head = root
-        while head and head.next:
-            if counter[head.next.val] != 1:
-                head.next = head.next.next
-            else:
-                head = head.next
-        return root.next
-```
-
 # 86. 分隔链表
 给定一个链表和一个特定值 x，对链表进行分隔，使得所有小于 x 的节点都在大于或等于 x 的节点之前。
 
@@ -245,6 +260,8 @@ class Solution:
 ```
 ## 方法
 做链表的题，不要省指针。
+
+这个题类似于快排的过程。
 
 用两个新指针，分别记录比x值小的和比x值大的，遍历原来的链表的时候根据值的大小拼接到对应的链表后面。
 
@@ -268,164 +285,24 @@ class Solution:
         return small_root.next
 ```
 
-# 92. 反转链表 II
-反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
-
-说明:
-1 ≤ m ≤ n ≤ 链表长度。
-
-示例:
-```
-输入: 1->2->3->4->5->NULL, m = 2, n = 4
-输出: 1->4->3->2->5->NULL
-```
-## 方法
-其实就是翻转链表的而变形题目了。做法大家都能想出来，进行一遍遍历，把第m到n个元素进行翻转，即依次插入到第m个节点的头部。这个题还是有意思的。建议后面再多做几遍。
-
-```python
-class Solution:
-    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
-        count = 1
-        root = ListNode(1)
-        root.next = head
-        pre = root
-        while pre.next and count<m:
-            pre = pre.next
-            count += 1
-        if count < m:
-            return head
-        
-        mNode = pre.next
-        curr = mNode.next
-        while curr and count<n:
-            Next = curr.next
-            curr.next = pre.next
-            pre.next = curr
-            mNode.next = Next
-            curr = Next
-            count += 1
-        
-        return root.next
-```
-
-# 138. 复制带随机指针的链表
-给定一个链表，每个节点包含一个额外增加的随机指针，该指针可以指向链表中的任何节点或空节点。
-
-要求返回这个链表的深拷贝。 
-
-示例：
-```
-输入：
-{"$id":"1","next":{"$id":"2","next":null,"random":{"$ref":"2"},"val":2},"random":{"$ref":"2"},"val":1}
-
-解释：
-节点 1 的值是 1，它的下一个指针和随机指针都指向节点 2 。
-节点 2 的值是 2，它的下一个指针指向 null，随机指针指向它自己。
- 
-```
-提示：
-
-你必须返回给定头的拷贝作为对克隆列表的引用。
-
-## 方法
-使用hashtable，在这个hash表里，记录了老链表和新链表的每一组对应。这样先构造了一个纯next的链表，然后再次循环就能得到带random的链表了。
-
-```python
-class Solution:
-    def copyRandomList(self, head: 'Node') -> 'Node':
-        nodeDict = dict()
-        dummy = Node(0, None, None)
-        nodeDict[head] = dummy
-        newHead, pointer = dummy, head
-        
-        while pointer:
-            nodeDict[pointer] = Node(pointer.val, pointer.next, None)
-            newHead.next = nodeDict[pointer]
-            newHead, pointer = newHead.next, pointer.next
-        
-        pointer = head
-        while pointer:
-            if pointer.random:
-                nodeDict[pointer].random = nodeDict[pointer.random]
-            pointer = pointer.next
-        return dummy.next
-```
-
-# 142. 环形链表 II
-给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
-
-为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。
-
-说明：不允许修改给定的链表。
-
-示例 1：
-```
-输入：head = [3,2,0,-4], pos = 1
-输出：tail connects to node index 1
-解释：链表中有一个环，其尾部连接到第二个节点。
-```
-
-## 方法一：set()
-如果我们保存走过的每个位置不就好了吗？所以，对于Python来说，可以直接把对象放到set中去，这样，当我们再次遍历到已经访问过的节点时，说明有了环，直接返回该节点即可。
-```python
-class Solution(object):
-    def detectCycle(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        if not head: return None
-        
-        visited = set()
-        while head:
-            if head in visited:
-                return head
-            visited.add(head)
-            head = head.next
-        return None
-```
-
-## 方法二：快慢指针
-
-```python
-class Solution(object):
-    def detectCycle(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        slow, fast = head, head
-        while fast and fast.next:
-            fast = fast.next.next
-            slow = slow.next
-            if fast == slow: # 相遇点
-                break
-        if not fast or not fast.next:
-            return None
-        
-        slow = head # 从头开始走
-        while slow != fast:
-            slow = slow.next # 从头开始走
-            fast = fast.next # 从相遇点开始走
-        return fast 
-```
-
 # 143. 重排链表
 给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
 将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
 
 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
 
-示例 1:
-```
-给定链表 1->2->3->4, 重新排列为 1->4->2->3.
-```
+示例1:给定链表 1->2->3->4, 重新排列为 1->4->2->3.
+
 示例 2:
 ```
 给定链表 1->2->3->4->5, 重新排列为 1->5->2->4->3.
 ```
 ## 方法
 题目大意:把一个链表的前半部分正序，后半部分逆序，然后一个一个的连接起来。
+
+链表无法随机访问数据，如何获得中间的元素？ 奇数还是偶数个节点？
+
+两次遍历还是一次遍历？
 ```python
 class Solution(object):
     def reorderList(self, head):
@@ -560,6 +437,58 @@ class Solution(object):
         move.next = l2 if l2 else l1
         return head.next
 ```
+
+# 328.奇偶链表
+
+## 方法
+给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+
+请尝试使用原地算法完成。你的算法的空间复杂度应为 O(1)，时间复杂度应为 O(nodes)，nodes 为节点总数。
+
+示例 1:
+```
+输入: 1->2->3->4->5->NULL
+输出: 1->3->5->2->4->NULL
+```
+示例 2:
+```
+输入: 2->1->3->5->6->4->7->NULL 
+输出: 2->3->6->7->1->5->4->NULL
+```
+说明:
+
+-   应当保持奇数节点和偶数节点的相对顺序。
+-   链表的第一个节点视为奇数节点，第二个节点视为偶数节点，以此类推。
+
+## 方法
+两条链,如果是奇数节点放到奇链，如果是偶数节点就放到偶链。最后，把偶链放到奇链的后面就好了。
+
+注意，偶链的末尾指针要设置成空，已让单链表终止。
+
+比如对于用例[1,2,3]，奇数链是1->3，偶链是2，而遍历完成后的偶链2仍然指向3的，所以死循环了。把尾指针设置成空就能终止了。
+
+```python
+class Solution:
+    def oddEvenList(self, head: ListNode) -> ListNode:
+        odd = ListNode(0)
+        even = ListNode(0)
+        oddHead, evenHead = odd, even
+        index = 0
+        while head:
+            if index & 1 == 0:
+                odd.next = head
+                odd = odd.next
+            else:
+                even.next = head
+                even = even.next
+            head = head.next
+            index += 1
+        even.next = None
+        odd.next = evenHead.next
+        return oddHead.next
+```
+
+
 
 # 参考
 -   [LeetCode 2. Add Two Numbers 解题报告（Python & C++）](https://blog.csdn.net/fuxuemingzhu/article/details/79379626)

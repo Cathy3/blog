@@ -1,6 +1,6 @@
 ---
-title: 《剑指offer》第2章03-15题(python)
-date: 2019-08-06
+title: 《剑指offer》第3章16-26题(python)
+date: 2019-08-14
 categories: 
 	-   Algorithm
 tags:  
@@ -9,8 +9,7 @@ tags:
 mathjax: true
 ---
 
--   3.数组中重复的数字
--   4.二维数组中的查找
+-   
 
 
 
