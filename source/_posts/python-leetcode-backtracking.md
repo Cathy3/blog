@@ -27,6 +27,7 @@ mathjax: true
 -   利用回溯算法求解 0-1 背包问题
 -   [Leetcode 78. 子集](https://leetcode-cn.com/problems/subsets/)
 -   [Leetcode 17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
+-   79. 单词搜索
 
 <!-- more -->
 
@@ -206,6 +207,56 @@ class Solution:
         return res
 ```
 
+# 79. 单词搜索
+给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+示例:
+```
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+给定 word = "ABCCED", 返回 true.
+给定 word = "SEE", 返回 true.
+给定 word = "ABCB", 返回 false.
+```
+
+## 方法：回溯
+这个题的回溯的起点可以是二维数组的任意位置。
+
+回溯法的判定条件比较简单，需要注意的是把已经走过的路给改变了，不能再走了。python中通过swapcase()交换该字母的大小写即可行。
+
+```python
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        for x in range(len(board)):
+            for y in range(len(board[0])):
+                if self.existword(board, word, x, y, 0):
+                    return True
+        return False
+    
+    def existword(self, board, word, x, y, i):
+        if i==len(word): #从第0个开始，word的每个字母都遍历到了
+            return True
+        if x<0 or x>=len(board) or y<0 or y>=len(board[0]):
+            return False
+        if board[x][y] != word[i]:
+            return False
+        
+        #该字母存在后，变小写，递归上下左右
+        board[x][y] = board[x][y].swapcase()
+        isexist = (self.existword(board, word, x+1, y, i+1) or 
+                   self.existword(board, word, x, y+1, i+1) or 
+                   self.existword(board, word, x-1, y, i+1) or 
+                   self.existword(board, word, x, y-1, i+1))
+        board[x][y] = board[x][y].swapcase() #变换回来大写
+        return isexist
+```
 
 # 参考
 -   [leetcode 78. Subsets-数组子集|回溯算法](https://blog.csdn.net/happyaaaaaaaaaaa/article/details/51604217)

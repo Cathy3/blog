@@ -1,6 +1,6 @@
 ---
 title: 《剑指offer》第3章16-26题(python)
-date: 2019-08-14
+date: 2019-08-15
 categories: 
 	-   Algorithm
 tags:  

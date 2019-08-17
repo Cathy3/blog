@@ -22,9 +22,12 @@ tags:
 -   用数组实现一个顺序栈
 -   用链表实现一个链式栈
 -   编程模拟实现一个浏览器的前进、后退功能
+-   155. 最小栈
 -   LeetCode 20. 有效的括号
 -   LeetCode 32. 最长有效的括号
 -   LeetCode 150. 逆波兰表达式求值
+-   496. 下一个更大元素 I
+-   503. 下一个更大元素 II
 
 <!-- more -->
 
@@ -170,6 +173,63 @@ if __name__ == '__main__':
 加载页面c
 返回到a
 前进到c
+```
+
+# 155. 最小栈
+设计一个支持 push，pop，top 操作，并能在常数时间内检索到最小元素的栈。
+
+push(x) -- 将元素 x 推入栈中。
+
+pop() -- 删除栈顶的元素。
+
+top() -- 获取栈顶元素。
+
+getMin() -- 检索栈中的最小元素。
+
+示例:
+```
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.getMin();   --> 返回 -2.
+```
+## 方法
+这个题要求在常数时间内获得最小值，因此不能在getMin()的时候再去计算，应该在push的时候就计算了。
+
+可以用一个栈，这个栈保存的是每个数字进入栈的时候的（值与最小值）。速度很快。
+```python
+class MinStack:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.stack = []
+
+    def push(self, x: int) -> None:
+        if not self.stack:
+            self.stack.append((x, x))
+        else:
+            self.stack.append((x, min(x, self.stack[-1][1])))
+    def pop(self) -> None:
+        self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1][0]
+
+    def getMin(self) -> int:
+        return self.stack[-1][1]
+
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(x)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
 ```
 
 # LeetCode 20. 有效的括号
@@ -331,7 +391,106 @@ class Solution:
         return int(stack.pop())
 ```
 
+# 496. 下一个更大元素 I
+给定两个没有重复元素的数组 nums1 和 nums2 ，其中nums1 是 nums2 的子集。找到 nums1 中每个元素在 nums2 中的下一个比其大的值。
 
+nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的右边的第一个比 x 大的元素。如果不存在，对应位置输出-1。
+
+示例 1:
+```
+输入: nums1 = [4,1,2], nums2 = [1,3,4,2].
+输出: [-1,3,-1]
+解释:
+    对于num1中的数字4，你无法在第二个数组中找到下一个更大的数字，因此输出 -1。
+    对于num1中的数字1，第二个数组中数字1右边的下一个较大数字是 3。
+    对于num1中的数字2，第二个数组中没有下一个更大的数字，因此输出 -1。
+```
+示例 2:
+```
+输入: nums1 = [2,4], nums2 = [1,2,3,4].
+输出: [3,-1]
+解释:
+    对于num1中的数字2，第二个数组中的下一个较大数字是3。
+    对于num1中的数字4，第二个数组中没有下一个更大的数字，因此输出 -1。
+```
+注意:
+
+-   nums1和nums2中所有元素是唯一的。
+-   nums1和nums2 的数组大小都不超过1000。
+
+
+## 方法一
+先从nums2中找到对应的nums1数值的序号，然后从这个序号往又找，看有没有比nums1数字大的。
+
+如果有，把这个数字放到结果里；如果没有，就把-1放到结果里。
+```python
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        ans = []
+        l2 = len(nums2)
+        for x in nums1:
+            index = -1
+            for i in range(l2):
+                if x == nums2[i]:
+                    index = i #找到对应相同的元素
+                    break
+            while index < l2 and x >= nums2[index]:
+                index += 1
+            if index == l2:
+                ans.append(-1)
+            else:
+                ans.append(nums2[index])
+        return ans
+```
+## 方法二：单调递减栈
+时间复杂度O(n + m) 其中n为nums的长度，m为findNums的长度
+
+栈stack维护nums的递减子集，记nums的当前元素为n，栈顶元素为top
+
+重复弹出栈顶，直到stack为空，或者top大于n为止
+
+将所有被弹出元素的next greater element置为n
+
+```python
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        dmap = {} #存放对应元素的答案
+        stack = []
+        for n in nums2:
+            while stack and stack[-1] < n:
+                dmap[stack.pop()] = n
+            stack.append(n)
+        return [dmap.get(x, -1) for x in nums1]
+```
+
+# 503. 下一个更大元素 II
+给定一个循环数组（最后一个元素的下一个元素是数组的第一个元素），输出每个元素的下一个更大元素。数字 x 的下一个更大的元素是按数组遍历顺序，这个数字之后的第一个比它更大的数，这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 -1。
+
+示例 1:
+```
+输入: [1,2,1]
+输出: [2,-1,2]
+解释: 第一个 1 的下一个更大的数是 2；
+数字 2 找不到下一个更大的数； 
+第二个 1 的下一个最大的数需要循环搜索，结果也是 2。
+```
+注意: 输入数组的长度不会超过 10000。
+
+## 单调递减栈
+对于循环数组的处理，将nums数组遍历两次，栈里保存的是索引, 下标对len(nums)取模
+```python
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        stack = []
+        size = len(nums)
+        ans = [-1] * size
+        for x in range(size * 2):
+            i = x % size
+            while stack and nums[stack[-1]] < nums[i]:
+                ans[stack.pop()] = nums[i]
+            stack.append(i)
+        return ans
+```
 
 # 参考
 -   [problem-solving-with-algorithms-and-data-structure-using-python](https://facert.gitbooks.io/python-data-structure-cn/content/)
