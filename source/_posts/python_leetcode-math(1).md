@@ -18,6 +18,7 @@ mathjax: true
 -   204. 计数素数
 -   231. 2的幂
 -   292. Nim 游戏
+-   400. 第N个数字
 
 <!-- more -->
 
@@ -338,6 +339,39 @@ class Solution:
         return n % 4 != 0
 ```
 
+# 400. 第N个数字
+在无限的整数序列 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...中找到第 n 个数字。
+
+注意:n 是正数且在32为整形范围内 ( n < 231)。
+
+示例 1:
+```
+输入:3
+输出:3
+```
+示例 2:
+```
+输入:11
+输出:0
+```
+说明: 第11个数字在序列 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ... 里是0，它是10的一部分。
+
+# 方法
+找规律：个位数字有9个，2位数字有910=90个，3位数字有9100=900个……所以我们先求出n是几位数字，然后判断第n个数字应该落在哪个自然数上，最后再求这个自然数会落在自然数的那一位上。
+```python
+class Solution:
+    def findNthDigit(self, n: int) -> int:
+        _len = 1
+        count = 9
+        start = 1
+        while n > count*_len:
+            n -= count*_len
+            count *= 10
+            _len += 1
+            start *= 10
+        start += (n-1)/_len
+        return int(str(start)[(n-1)%_len])
+```
 
 # 参考
 -   [How Many Primes Are There?](https://primes.utm.edu/howmany.html)
