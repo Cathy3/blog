@@ -16,6 +16,10 @@ tags:
 -   136. 只出现一次的数字
 -   977. 有序数组的平方
 -   240. 搜索二维矩阵 II
+-   74. 搜索二维矩阵
+-   347. 前 K 个高频元素
+-   560. 和为K的子数组
+
 <!-- more -->
 
 # 4. 寻找两个有序数组的中位数
@@ -479,6 +483,75 @@ class Solution:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         matrix = np.reshape(matrix, [1, -1])
         return target in matrix    
+```
+
+# 347. 前 K 个高频元素
+给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+
+示例 1:
+```
+输入: nums = [1,1,1,2,2,3], k = 2
+输出: [1,2]
+```
+示例 2:
+```
+输入: nums = [1], k = 1
+输出: [1]
+```
+说明：
+
+-   你可以假设给定的 k 总是合理的，且 1 ≤ k ≤ 数组中不相同的元素的个数。
+-   你的算法的时间复杂度必须优于 O(n log n) , n 是数组的大小。
+
+## 字典
+这个题要求时间复杂度是O(nlogn)，就可以按照出现的次数先排个序，然后找到出现最多的k个就好。
+
+Counter类有most_common()函数，能按出现的次数进行排序。返回的是个列表，列表中每个元素都是一个元组，元组的第一个元素是数字，第二个数字是出现的次数。
+
+```python
+from collections import Counter
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        counter = Counter(nums).most_common()
+        return [counter[i][0] for i in range(k)]
+```
+
+# 560. 和为K的子数组
+给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数。
+
+示例 1 :
+```
+输入:nums = [1,1,1], k = 2
+输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
+```
+说明 :
+
+-   数组的长度为 [1, 20,000]。
+-   数组中元素的范围是 [-1000, 1000] ，且整数 k 的范围是 [-1e7, 1e7]。
+
+## 方法：字典
+使用一个字典保存数组某个位置之前的数组和，然后遍历数组求和，这样当我们求到一个位置的和的时候，向前找sum-k是否在数组中，如果在的话，更新结果为之前的结果+(sum-k出现的次数)。同时，当前这个sum出现的次数就多了一次。
+
+这个字典的意义是什么呢？其意义就是我们在到达i位置的时候，前i项的和出现的次数的统计。我们想找的是在i位置向前的连续区间中，有多少个位置的和是k。有了这个统计，我们就不用向前一一遍历找sum - k在哪些位置出现了，而是直接得出了前面有多少个区间。所以，在每个位置我们都得到了以这个位置为结尾的并且和等于k的区间的个数，所以总和就是结果。
+
+这个题的解法不难想出来，因为如果要降低时间复杂度，应该能想到增加空间复杂度，那么要么使用数组，要么就是用字典之类的，保留之前的结果。
+
+时间复杂度是O(N)，空间复杂度是O(N).
+
+```python
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        d = collections.defaultdict(int)
+        d[0] = 1
+        res = 0
+        sum = 0
+        for i in range(n):
+            sum += nums[i]
+            if sum-k in d:
+                res += d[sum-k]
+            d[sum] += 1
+        return res
 ```
 
 # 参考

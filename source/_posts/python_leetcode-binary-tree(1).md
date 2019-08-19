@@ -26,9 +26,11 @@ mathjax: true
     -   LeetCode 94. 二叉树的中序遍历
     -   LeetCode 145. 二叉树的后序遍历
     -   LeetCode 102. 二叉树的层次遍历
--   LeetCode 98. 验证二叉搜索树
--   LeetCode 103. 二叉树的锯齿形层次遍历
--   LeetCode 226. 翻转二叉树
+-   105. 从前序与中序遍历序列构造二叉树
+-   98. 验证二叉搜索树
+-   103. 二叉树的锯齿形层次遍历
+-   114. 二叉树展开为链表
+-   226. 翻转二叉树
  
 <!-- more -->
 
@@ -731,6 +733,39 @@ class Solution:
         return res
 ```
 
+# 105. 从前序与中序遍历序列构造二叉树
+根据一棵树的前序遍历与中序遍历构造二叉树。
+
+注意: 你可以假设树中没有重复的元素。
+
+例如，给出
+```
+前序遍历 preorder = [3,9,20,15,7]
+中序遍历 inorder = [9,3,15,20,7]
+```
+返回如下的二叉树：
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+## 方法
+先序遍历的开头第一个元素是根元素，找到其在中序遍历中的位置，分割出左右子树。再根据左右子树的长度在先序遍历中划分。
+
+```python
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        if not preorder or not inorder:
+            return None
+        root = TreeNode(preorder[0])
+        index = inorder.index(preorder[0])
+        root.left = self.buildTree(preorder[1:index+1], inorder[:index])
+        root.right = self.buildTree(preorder[index+1:], inorder[index+1:])
+        return root
+```
+
 # 二叉树的锯齿形层次遍历
 [LeetCode 103. Binary Tree Zigzag Level Order Traversal](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
 
@@ -846,6 +881,55 @@ class Solution:
         if root.val >= max or root.val <= min:
             return False
         return self.valid(root.left, min, root.val) and self.valid(root.right, root.val, max)
+```
+
+# 114. 二叉树展开为链表
+给定一个二叉树，原地将它展开为链表。
+
+例如，给定二叉树
+```
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+```
+将其展开为：
+```
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+```
+
+## 方法：先序遍历
+最简单的方法就是使用列表保存先序遍历的每个节点，然后在列表中完成操作。即，使得列表中每个元素的左孩子为空，右孩子都是下一个节点。
+
+这个方法很简单，不过需要O(N)的空间复杂度。
+```python
+class Solution:
+    def flatten(self, root: TreeNode) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        res = []
+        self.preOrder(root, res)
+        for i in range(len(res)-1):
+            res[i].left = None
+            res[i].right = res[i+1]
+        
+    def preOrder(self, root, res):
+        if not root:return 
+        res.append(root)
+        self.preOrder(root.left, res)
+        self.preOrder(root.right, res)
 ```
 
 # 翻转二叉树

@@ -28,7 +28,7 @@ tags:
 -   LeetCode 150. 逆波兰表达式求值
 -   496. 下一个更大元素 I
 -   503. 下一个更大元素 II
-
+-   42. 接雨水
 <!-- more -->
 
 # 用数组实现一个顺序栈
@@ -492,8 +492,38 @@ class Solution:
         return ans
 ```
 
+# 42. 接雨水
+[Trapping Rain Water](https://leetcode-cn.com/problems/trapping-rain-water/)
+
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+示例:
+```
+输入: [0,1,0,2,1,0,1,3,2,1,2,1]
+输出: 6
+```
+## 方法: 单调递增栈
+如果出现一个元素比栈顶元素大的话，那么此时必然可以形成凹槽，此时我们只需要计算凹槽长度和边界的高度差那么必然可以计算出接水的面积。
+
+```python
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if len(height)<3: return 0
+        
+        res=0
+        stack = list()
+        for i in range(len(height)):
+            while stack and height[stack[-1]] < height[i]:
+                tmp = stack.pop()
+                if stack:
+                    res += (min(height[i],height[stack[-1]])-height[tmp]) * (i-stack[-1]-1)
+            stack.append(i)
+        return res
+```
+
 # 参考
 -   [problem-solving-with-algorithms-and-data-structure-using-python](https://facert.gitbooks.io/python-data-structure-cn/content/)
 -   [How does the Back button in a web browser work?
 ](https://stackoverflow.com/questions/1313788/how-does-the-back-button-in-a-web-browser-work)
 -   [【LeetCode】150. Evaluate Reverse Polish Notation 解题报告（Python）](https://blog.csdn.net/fuxuemingzhu/article/details/79559703)
+-   [Leetcode 42：接雨水（超详细的解法！！！）](https://blog.csdn.net/qq_17550379/article/details/84945427)
