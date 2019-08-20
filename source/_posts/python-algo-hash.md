@@ -26,7 +26,7 @@ tags:
 -   实现一个 LRU 缓存淘汰算法 
 -   LeetCode 1. 两数之和
 -   LeetCode 202. Happy Number
-
+-   387. 字符串中的第一个唯一字符
 <!-- more -->
 
 # 实现一个基于链表法解决冲突问题的散列表
@@ -244,6 +244,29 @@ class Solution:
         return n in happySet
 ```
 
+# 387. 字符串中的第一个唯一字符
+给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 -1。
+
+案例:
+
+s = "leetcode"   返回 0.
+
+s = "loveleetcode",  返回 2.
+
+注意事项：您可以假定该字符串只包含小写字母。
+
+## 方法
+首先做个字符出现次数的统计，然后再次遍历，找出只出现了一次的第一个字符。
+
+```python
+class Solution:
+    def firstUniqChar(self, s: str) -> int:
+        counter = collections.Counter(s)
+        for i,c in enumerate(s):
+            if counter[c] == 1:
+                return i
+        return -1
+```
 
 # 参考
 -    [缓存淘汰算法--LRU算法](https://zhuanlan.zhihu.com/p/34989978)

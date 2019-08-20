@@ -17,8 +17,11 @@ mathjax: true
 -   89. 格雷编码
 -   204. 计数素数
 -   231. 2的幂
+-   263. 丑数
+-   264. 丑数 II
 -   292. Nim 游戏
 -   400. 第N个数字
+-
 
 <!-- more -->
 
@@ -312,6 +315,81 @@ class Solution(object):
         """
         if n <= 0: return False
         return n & (n - 1) == 0
+```
+
+
+# 263. 丑数
+编写一个程序判断给定的数是否为丑数。
+
+丑数就是只包含质因数 2, 3, 5 的正整数。
+
+示例 1:
+```
+输入: 6
+输出: true
+解释: 6 = 2 × 3
+```
+示例 2:
+```
+输入: 8
+输出: true
+解释: 8 = 2 × 2 × 2
+```
+示例 3:
+```
+输入: 14
+输出: false 
+解释: 14 不是丑数，因为它包含了另外一个质因数 7。
+```
+说明：
+
+-   1 是丑数。
+-   输入不会超过 32 位有符号整数的范围: [−231,  231 − 1]。
+
+## 方法
+把这个数中的所有的2,3,5的因子全部除去，剩余的数为1，则说明全部为这几个因子构成。
+```python
+class Solution:
+    def isUgly(self, num: int) -> bool:
+        if num==0: return False
+        while num%2==0:
+            num /= 2
+        while num%3==0:
+            num /= 3
+        while num%5==0:
+            num /= 5
+        return num==1
+```
+
+# 264. 丑数 II
+编写一个程序，找出第 n 个丑数。
+
+丑数就是只包含质因数 2, 3, 5 的正整数。
+
+示例:
+```python
+输入: n = 10
+输出: 12
+解释: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 是前 10 个丑数。
+```
+说明:  
+
+-   1 是丑数。
+-   n 不超过1690。
+
+## 方法
+```python
+class Solution:
+    def nthUglyNumber(self, n: int) -> int:
+        if n<0: return 0
+        dp = [1]*n
+        index2, index3, index5 = 0,0,0
+        for i in range(1,n):
+            dp[i] = min(dp[index2]*2, dp[index3]*3, dp[index5]*5)
+            if dp[i]==dp[index2]*2: index2 += 1
+            if dp[i]==dp[index3]*3: index3 += 1
+            if dp[i]==dp[index5]*5: index5 += 1
+        return dp[-1]
 ```
 
 # 292. Nim 游戏

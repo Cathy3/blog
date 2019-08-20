@@ -21,9 +21,6 @@ mathjax: true
 
 -   [LeetCode 509. 斐波那契数列](https://leetcode-cn.com/problems/fibonacci-number/)
 -   [LeetCode 70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
--   0-1 背包问题
-    -   自我实现
-    -   Palindrome Partitioning II(132)
 -   62. 不同路径
 -   63. 不同路径 II
 -   [LeetCode 64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
@@ -35,7 +32,7 @@ mathjax: true
 -   [LeetCode 120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/)
 -   [LeetCode 152. 乘积最大子序列](https://leetcode-cn.com/problems/maximum-product-subarray/)
 -   [LeetCode 300. 最长上升子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
--   [LeetCode 322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
+
 
 
 <!-- more -->
@@ -576,44 +573,6 @@ class Solution:
                     dp[i] = max(dp[i], dp[j]+1)
         return max(dp)
 ```
-
-# 322. 零钱兑换
-
-给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
-
-示例 1:
-```
-输入: coins = [1, 2, 5], amount = 11
-输出: 3 
-解释: 11 = 5 + 5 + 1
-```
-示例 2:
-```
-输入: coins = [2], amount = 3
-输出: -1
-```
-说明:
-你可以认为每种硬币的数量是无限的。
-
-## 方法：动态规划
-dp[i]表示凑够i元所需要的最少硬币数,
-那再加一个面值为c的硬币，`dp[i + c] = min(dp[i] + 1, dp[i + c])`
-
-```python
-class Solution:
-    def coinChange(self, coins: List[int], amount: int) -> int:
-        dp = [0]+[-1]*amount # 初始化，第一个值为0，其余全是-1
-        for i in range(amount):
-            if dp[i]<0: #跳过一些无需计算的值
-                continue
-            for c in coins:
-                if i+c > amount:
-                    continue # 越界，跳出循环，换下一种硬币
-                if dp[i+c]>dp[i]+1 or dp[i+c]<0:
-                    dp[i+c] = dp[i]+1
-        return dp[amount]
-```
-
 
 
 
