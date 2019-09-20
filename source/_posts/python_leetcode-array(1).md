@@ -15,7 +15,6 @@ tags:
 -   26. 删除排序数组中的重复项
 -   27. 移除元素
 -   35. 搜索插入位置
--   53. 最大子序和
 -   66. 加一
 -   118. 杨辉三角
 -   119. 杨辉三角 II
@@ -197,59 +196,6 @@ class Solution(object):
         return left
 ```
 理论上应该比前一个方法快，实际测评结果较慢。
-
-# 53. 最大子序和
-[Maximum Subarray](https://leetcode-cn.com/problems/maximum-subarray/)
-
-## 题目描述
-给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
-
-**示例:**
-
-> 输入: [-2,1,-3,4,-1,2,1,-5,4],
-
-> 输出: 6
-
-> 解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
-
-## 方法：Kadane's algorithm
-- 用两个指针：max_so_far 指针记录此前所有碰到的最大和，max_ending_here 指针记录循环到当前元素的最大和。
-- 当循环到元素i时，
-    - 如果 max_ending_here < 0 的话，说明此前的和是负的，需要舍弃，所以将 max_ending_here 的值变为 i。
-    - 反之，表明当前的和还是正值， 将 max_ending_here 的值变为 i + max_ending_here,可以继续向前探索。
-    - max_so_far 和 max_ending_here 比较，取较大值。
-
-```python
-class Solution(object):
-    def maxSubArray(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        max_so_far = max_ending_here = nums[0]
-        
-        for i in range(1,len(nums)):
-            if max_ending_here < 0:
-                max_ending_here = nums[i]
-            else:
-                max_ending_here += nums[i]
-            if max_ending_here > max_so_far:
-                max_so_far = max_ending_here
-        return max_so_far
-```
-
-## 方法： 动态规划
-
-```python
-class Solution:
-    def maxSubArray(self, nums: List[int]) -> int:
-        maxsum = res = nums[0]
-        for i in range(1, len(nums)):
-            maxsum = max(maxsum + nums[i], nums[i])
-            res = max(maxsum, res)
-        return res
-```
-结果不如前一种方法快
 
 # 66. 加一
 [Plus One](https://leetcode-cn.com/problems/plus-one/)

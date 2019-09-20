@@ -10,28 +10,33 @@ tags:
         -   动态规划
 mathjax: true
 ---
-动态规划主要方法是画网格⭐。
+动态规划方法可以画网格⭐。
 
-1.  递归 + 记忆化 ——> 递推（动态规划）
+1.  递归 + 记忆化 ——> 递推（动态规划）（自上而下的记忆化搜索）
 2.  状态的定义：数组 opt[n], dp[n], fib[n] 
 3.  状态转移方程：opt[n] = best_of(opt[n-1], opt[n-2], ...) 从前面的n-1个值得到最优的第n个值
 4.  最优子结构
 
+动态规划是自下而上的解决问题。（先解决小数据量下的问题怎么解决，之后层层递推更大的数据量问题。）
+
+将原问题拆解成若干子问题，同时保存子问题的答案，使得每个子问题只求解一次，最终获得原问题的答案。
+
 **学习内容：**
 
--   [LeetCode 509. 斐波那契数列](https://leetcode-cn.com/problems/fibonacci-number/)
--   [LeetCode 70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+-   [509. 斐波那契数列](https://leetcode-cn.com/problems/fibonacci-number/)
+-   [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+
 -   62. 不同路径
 -   63. 不同路径 II
--   [LeetCode 64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
--   编程实现莱文斯坦最短编辑距离
-    -   [LeetCode 72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
--   找最长公共子串
-    -   [LeetCode718. 最长重复子数组](https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/)
--   [LeetCode 10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
--   [LeetCode 120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/)
--   [LeetCode 152. 乘积最大子序列](https://leetcode-cn.com/problems/maximum-product-subarray/)
--   [LeetCode 300. 最长上升子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
+-   [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+-   [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/)
+
+-   198. 打家劫舍
+-   213. 打家劫舍 II
+-   337. 打家劫舍 III
+
+-   309. 最佳买卖股票时机含冷冻期
+-   714. 买卖股票的最佳时机含手续费
 
 
 
@@ -234,226 +239,8 @@ class Solution:
         return grid[m-1][n-1]
 ```
 
-# 72. 编辑距离
-给定两个单词 word1 和 word2，计算出将 word1 转换成 word2 所使用的最少操作数 。
-
-你可以对一个单词进行如下三种操作：
-```
-插入一个字符
-删除一个字符
-替换一个字符
-```
-
-示例 1:
-```
-输入: word1 = "horse", word2 = "ros"
-输出: 3
-解释: 
-horse -> rorse (将 'h' 替换为 'r')
-rorse -> rose (删除 'r')
-rose -> ros (删除 'e')
-```
-示例 2:
-```
-输入: word1 = "intention", word2 = "execution"
-输出: 5
-解释: 
-intention -> inention (删除 't')
-inention -> enention (将 'i' 替换为 'e')
-enention -> exention (将 'n' 替换为 'x')
-exention -> exection (将 'n' 替换为 'c')
-exection -> execution (插入 'u')
-```
-
-## 方法：递归
-判断最后的一个字符是否相等。
-
--   如果相等，那么只用判断前面的子串即可，
--   如果不等，需要前面子串变成相等之后+1(删、增、换) 把word1变成word2。
-
-```python
-class Solution:
-    def minDistance(self, word1: str, word2: str) -> int:
-        L1, L2 = len(word1), len(word2)
-        dp = [[-1]*(L2+1) for _ in range(L1+1)] # 初始化全部小于0
-        return self.getDistance(word1, word2, dp, L1, L2)
-    def getDistance(self, word1, word2, dp, pos1, pos2):
-        if pos1 == 0: return pos2 # pos表示当前位置，也表示前面子串的长度
-        if pos2 == 0: return pos1
-        if dp[pos1][pos2] >= 0: return dp[pos1][pos2] # 当前位置的操作数
-        
-        res = 0
-        if word1[pos1-1] == word2[pos2-1]:
-            res = self.getDistance(word1, word2, dp, pos1-1, pos2-1)
-        else:
-            res = 1 + min(self.getDistance(word1, word2, dp, pos1-1, pos2),#如果删除后，剩下的前面子串的操作数
-                          self.getDistance(word1, word2, dp, pos1, pos2-1),#如果插入后，剩下的前面子串的操作数
-                          self.getDistance(word1, word2, dp, pos1-1, pos2-1))#如果替换后，剩下的前面子串的操作数
-        dp[pos1][pos2] = res
-        return res
-```
-
-## 方法：动态规划
-上一个方法很容易改成动态规划。事实上，这个题的动态规划比记忆化搜索还要慢。
-```python
-class Solution:
-    def minDistance(self, word1: str, word2: str) -> int:
-        L1, L2 = len(word1), len(word2)
-        dp = [[0] * (L2 + 1) for _ in range(L1 + 1)]
-        for i in range(L1 + 1):
-            dp[i][0] = i
-        for j in range(L2 + 1):
-            dp[0][j] = j
-        for i in range(1, L1 + 1):
-            for j in range(1, L2 + 1):
-                if word1[i - 1] == word2[j - 1]:
-                    dp[i][j] = dp[i - 1][j - 1]
-                else:
-                    dp[i][j] = 1 + min(dp[i - 1][j],
-                                       dp[i][j - 1],
-                                       dp[i - 1][j - 1])
-        return dp[L1][L2]
-```
-
-
-
-# 718. 最长重复子数组
-给两个整数数组 A 和 B ，返回两个数组中公共的、长度最长的子数组的长度。
-
-示例 1:
-```
-输入:
-A: [1,2,3,2,1]
-B: [3,2,1,4,7]
-输出: 3
-解释: 长度最长的公共子数组是 [3, 2, 1]。
-```
-说明:
-
-1.  1 <= len(A), len(B) <= 1000
-2.  0 <= A[i], B[i] < 100
-
-## 方法:动态规划
-是找到当前节点之前连续的公共子串长度问题。
-
-画格子：横纵坐标分别是A和B，对应比较，相等时，格子为1，或者左上角的数+1。
-
-
-状态转移就2种，要么上一个匹配成功，要么这一个匹配成功，其他情况都为0。
-
-我们可以用匹配矩阵来做，让行作为第一个字符串，列为第二个字符串，那么 dp[row][col] 则是第一个字符串第 row 位置和第二个字符串第 col 位置最大的匹配长度。
-
-递推关系为，dp[i][j] = dp[i-1][j-1]+1，当A[i]== B[j]。如果不等的话，dp[i][j]为0.
-
-```python 
-class Solution:
-    def findLength(self, A: List[int], B: List[int]) -> int:
-        m, n = len(A), len(B)
-        dp = [[0 for j in range(n)] for i in range(m)]
-        for i in range(m):
-            for j in range(n):
-                if A[i] == B[j]:
-                    if i==0 or j==0:
-                        dp[i][j]=1
-                    else:
-                        dp[i][j] = dp[i-1][j-1] + 1
-        return max(map(max,dp))
-```
-
-
-
-
-
-# 10. 正则表达式匹配
-给定一个字符串 (s) 和一个字符模式 (p)。实现支持 '.' 和 '*' 的正则表达式匹配。
-```
-'.' 匹配任意单个字符。
-'*' 匹配零个或多个前面的元素。
-```
-匹配应该覆盖整个字符串 (s) ，而不是部分字符串。
-
-说明:
-
--   s 可能为空，且只包含从 a-z 的小写字母。
--   p 可能为空，且只包含从 a-z 的小写字母，以及字符 . 和 *。
-
-示例 1:
-```
-输入:
-s = "aa"
-p = "a"
-输出: false
-解释: "a" 无法匹配 "aa" 整个字符串。
-```
-示例 2:
-```
-输入:
-s = "aa"
-p = "a*"
-输出: true
-解释: '*' 代表可匹配零个或多个前面的元素, 即可以匹配 'a' 。因此, 重复 'a' 一次, 字符串可变为 "aa"。
-```
-示例 3:
-```
-输入:
-s = "ab"
-p = ".*"
-输出: true
-解释: ".*" 表示可匹配零个或多个('*')任意字符('.')。
-```
-示例 4:
-```
-输入:
-s = "aab"
-p = "c*a*b"
-输出: true
-解释: 'c' 可以不被重复, 'a' 可以被重复一次。因此可以匹配字符串 "aab"。
-```
-示例 5:
-```
-输入:
-s = "mississippi"
-p = "mis*is*p*."
-输出: false
-```
-
-## 方法：动态规划
-动态方程 `dp[i][j]` 表示 $s$ 中 [0, i-1] 这前 $i$ 个字符与 $p$ 的 [0, j-1] 这前 $j$ 个字符组成的表示式是否匹配。
-
-$$
-dp[i+1][j+1] =
-\begin{cases}
-dp[i][j],  & \text{p[j] == '.'  or  (s[i] == p[j ])} 
-\\[2ex]
-dp[i+1][j-1]  , & \text{p[j] == '*' and p[j-1] 匹配0次}
-\\[2ex]
-dp[i+1][j], &\text{p[j] == '*' and p[j -1] 匹配1次}
-\\[2ex]
-dp[i][j+1],&\text{p[j] == '*' and p[j-1] 匹配超过1次}
-\end{cases}
-$$
-
-
-```python
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        dp = [[False for _ in range(len(p)+1)] for _ in range(len(s)+1)]
-        dp[0][0] = True
-        for j in range(len(p)):
-            if p[j]=='*': # 星号匹配空
-                dp[0][j+1] = dp[0][j-1]
-                
-        for i in range(len(s)):
-            for j in range(len(p)):
-                if p[j] == s[i] or p[j]=='.':# 按位比较，相等
-                    dp[i+1][j+1] = dp[i][j]
-                if p[j] =='*':# 星号分两种情况
-                    if p[j-1] != s[i] and p[j-1]!='.': #匹配0次
-                        dp[i+1][j+1] = dp[i+1][j-1]
-                    else: # 匹配多次、1次、0次
-                        dp[i+1][j+1] = (dp[i][j+1] or dp[i+1][j] or dp[i+1][j-1])
-        return dp[len(s)][len(p)]
-```
+-   题目中说每个格子里是非负整数，负数会有什么影响？
+-   限定的只能左移或下移，如果没有限定，上下左右都可以，会怎么办？
 
 # 120. 三角形最小路径和
 给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。
@@ -499,83 +286,278 @@ class Solution:
     
 ```
 
-# 152. 乘积最大子序列
-给定一个整数数组 nums ，找出一个序列中乘积最大的连续子序列（该序列至少包含一个数）。
+# 198. 打家劫舍
+你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。
 
 示例 1:
 ```
-输入: [2,3,-2,4]
-输出: 6
-解释: 子数组 [2,3] 有最大乘积 6。
+输入: [1,2,3,1]
+输出: 4
+解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
 ```
 示例 2:
 ```
-输入: [-2,0,-1]
-输出: 0
-解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
+输入: [2,7,9,3,1]
+输出: 12
+解释: 偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
+     偷窃到的最高金额 = 2 + 9 + 1 = 12 。
 ```
 
-## 方法：动态规划
-思路与 [53. 求连续子数组的最大和](https://cathy3.github.io/2019/02/22/%E7%94%A8python%E5%88%B7LeetCode%E6%95%B0%E7%BB%84%E9%A2%98(%E7%AE%80%E5%8D%95%E7%BA%A7)(%E4%B8%80)/) 相似，都是采用动态规划，`maxvalue[i]`表示以`a[i]`为结尾的子数组中最大乘积，同时维护一个全局最大值`globalmax`。与求子数组的最大和不同的是，还需要维记录子数组最小乘积`minvalue[i]`，因为可能会出现 负 × 负 = 正的情况。并且最大最小乘积只可能出现在 
-`maxvalue[i−1]×a[i], minvalue[i−1]×a[i], a[i]`三者之间。
+## 方法一
+假设只有一家，那么你只能偷这家；假设有两家，那么你要判断两家哪个钱多，偷哪个；依次类推，假设有n家，那么你要判断“偷第n家不偷第n-1家且前n-2家尽量多的偷”和“不偷第n家且前n-1家尽量多的偷”，哪个得到的钱多偷哪个。 
+你可以递归求解，然而复杂度太高无法AC。所以应该记录已经计算过的结果，于是这变成一个动态规划问题。
 
 ```python
 class Solution:
-    def maxProduct(self, nums: List[int]) -> int:
-        maxvalue = minvalue = nums[0]
-        globalmax = nums[0]
-        for i in range(1, len(nums)):
-            lastmax = maxvalue
-            maxvalue = max(minvalue * nums[i], lastmax * nums[i], nums[i])#当前最大
-            minvalue = min(minvalue * nums[i], lastmax * nums[i], nums[i])#当前最小
-            globalmax = max(globalmax, maxvalue) # 全局最大
-        return globalmax
+    def rob(self, nums: List[int]) -> int:
+        if len(nums) == 0: return 0
+        elif len(nums)<2: return max(nums[0], nums[-1])
+        
+        money = [0]*len(nums)
+        money[0],money[1] = nums[0], max(nums[0], nums[1])
+        for i in range(2, len(nums)):
+            money[i] = max(nums[i] + money[i-2], money[i-1])
+        return money[len(nums)-1]
 ```
 
-# 300. 最长上升子序列
-给定一个无序的整数数组，找到其中最长上升子序列的长度。
+## 方法二：更简洁的写法
+上 面的代码使用的空间是冗余的，因为每次循环只会用到前两个数据。所以代码可以降低空间复杂度到O(1)。
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        now = last = 0
+        for i in nums:
+            last, now = now, max(i+last, now)
+        return now
+```
+
+# 213. 打家劫舍 II
+你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都围成一圈，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。
+
+示例 1:
+```
+输入: [2,3,2]
+输出: 3
+解释: 你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
+```
+示例 2:
+```
+输入: [1,2,3,1]
+输出: 4
+解释: 你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+```
+## 方法
+这个是198题的拓展。本题目里面的房间是一个环的，也就是说第一个房子和最后一个房子是相邻的。在这种情况下，相邻的两个房子不能一起偷，求能偷到的金额的最大值。
+
+多了环的条件，在这个约束下就多了个不同时偷第一个和最后一个就可以了。所以，两种偷的情况：第一种不偷最后一个房间，第二种不偷第一个房间，求这两种偷法能获得的最大值。所以只多了一个切片的过程。
+
+状态转移方程仍然是：
+```
+dp[0] = num[0] （当i=0时） 
+dp[1] = max(num[0], num[1]) （当i=1时） 
+dp[i] = max(num[i] + dp[i - 2], dp[i - 1]) （当i !=0 and i != 1时）
+```
+第三个式子就是当前的房间偷的情况和不偷情况下的最大值。
+
+时间复杂度是O(N)，空间复杂度是O(N).
+
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        if not nums: return 0
+        N = len(nums)
+        if N == 1: return nums[0]
+        if N == 2: return max(nums[0], nums[1])
+        return max(self.rob_range(nums[0: N-1]), self.rob_range(nums[1:N]))
+    
+    def rob_range(self, nums):
+        if not nums: return 0
+        N = len(nums)
+        if N == 1: return nums[0]
+        if N == 2: return max(nums[0], nums[1])
+        
+        dp = [0]*N
+        dp[0] = nums[0]
+        dp[1] = max(nums[0], nums[1])
+        for i in range(2, N):
+            dp[i] = max(dp[i-1], dp[i-2] + nums[i])
+        return dp[-1]
+```
+
+
+
+# 337. 打家劫舍 III
+在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。 除了“根”之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。
+
+计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
+
+示例 1:
+```
+输入: [3,2,3,null,3,null,1]
+
+     3
+    / \
+   2   3
+    \   \ 
+     3   1
+
+输出: 7 
+解释: 小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
+```
+示例 2:
+```
+输入: [3,4,5,1,3,null,1]
+
+     3
+    / \
+   4   5
+  / \   \ 
+ 1   3   1
+
+输出: 9
+解释: 小偷一晚能够盗取的最高金额 = 4 + 5 = 9.
+```
+
+## 方法
+就是求本节点+孙子更深节点vs儿子节点+重孙更深的节点的比较。
+
+用了dfs函数，虽然递归是自顶向下的，但是因为是不断的return，所以真正求值是从底向上的。
+
+用到了一个有两个元素的列表，分别保存了之前层的，不取节点和取节点的情况。然后遍历左右子树，求出当前节点取和不取能得到的值，再返回给上一层。
+
+注意这个里面的robcur是当前节点能达到的最大值，所以最后返回结果的时候试试返回的root节点robcur的值
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def rob(self, root: TreeNode) -> int:
+        
+        def dfs(root):
+            if not root: return [0, 0]
+            left = dfs(root.left)
+            right = dfs(root.right)
+            norob = left[1] + right[1] #本节点不抢劫，儿子节点的最大值
+            robcur = max(root.val + left[0] + right[0], norob)
+            return [norob, robcur]
+        return dfs(root)[1]   
+```
+
+
+# 309. 最佳买卖股票时机含冷冻期
+给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
+
+设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+
+-   你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+-   卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
 
 示例:
 ```
-输入: [10,9,2,5,3,7,101,18]
-输出: 4 
-解释: 最长的上升子序列是 [2,3,7,101]，它的长度是 4。
+输入: [1,2,3,0,2]
+输出: 3 
+解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
 ```
-说明:
+## 方法
+这个题和 714题 比较像。做题方法都是使用了两个数组：
 
--   可能会有多种最长上升子序列的组合，你只需要输出对应的长度即可。
--   你算法的时间复杂度应该为 O(n2) 。
+1.  sell 该天结束手里没有股票的情况下，已经获得的最大收益
+    -   sell[i]代表的是手里没有股票的收益，这种可能性是今天卖了或者啥也没干。
+    -   max(昨天手里有股票的收益+今天卖股票的收益，昨天手里没有股票的收益)， 即 `max(sell[i - 1], hold[i - 1] + prices[i])`；
+2.  hold 该天结束手里有股票的情况下，已经获得的最大收益
+    -   hold[i]代表的是手里有股票的收益，这种可能性是今天买了股票或者啥也没干，今天买股票必须昨天休息。
+    -   max(今天买股票是前天卖掉股票的收益-今天股票的价格，昨天手里有股票的收益）。即 `max(hold[i - 1], sell[i - 2] - prices[i])`。
 
-进阶: 你能将算法的时间复杂度降低到 O(n log n) 吗?
+另外需要注意的是，题目说的是昨天卖了股票的话今天不能买，对于开始的第一天，不可能有卖股票的行为，所以需要做个判断。
 
-## 方法：动态规划
-数组 dp 的 `dp[i]` 是保存到第 i 位置为止的最长递增子序列的长度。
-
-最后求所有位置的最大值，而不是 dp 的最后元素。
-
-递推式：
-
-```
-循环位置i之前的所有元素 j ：
-    如果 num[j] < nums[i]:
-        当前最大dp[i] = max{dp[i], dp[j]+1},此时dp[j]已经是j位置为止的最大长度
-```
+该算法的时间复杂度是O(n)，空间复杂度是O(n)。
 
 ```python
 class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        if not nums: return 0
-        dp = [1]*len(nums)
-        
-        for i in range(1, len(nums)):
-            for j in range(0,i):
-                if nums[j] < nums[i]:
-                    dp[i] = max(dp[i], dp[j]+1)
-        return max(dp)
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices: return 0
+        sell = [0] * len(prices) #没有股票的收益
+        hold = [0] * len(prices) #持有股票的收益
+        hold[0] = -prices[0] #第一天
+        for i in range(1, len(prices)):
+            sell[i] = max(sell[i-1], hold[i-1] + prices[i])
+            hold[i] = max(hold[i-1], (sell[i-2] if i>=2 else 0) - prices[i])
+        return sell[-1]
+```
+如果使用O(1)的空间复杂度，那么就可以写成下面这样：
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices: return 0
+        prev_sell = 0
+        curr_sell = 0
+        hold = -prices[0]
+        for i in range(1, len(prices)):
+            temp = curr_sell
+            curr_sell = max(curr_sell, hold + prices[i])
+            hold = max(hold, (prev_sell if i >= 2 else 0) - prices[i])
+            prev_sell = temp
+        return curr_sell
 ```
 
+# 714. 买卖股票的最佳时机含手续费
+给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
 
+你可以无限次地完成交易，但是你每次交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
 
+返回获得利润的最大值。
+
+示例 1:
+```
+输入: prices = [1, 3, 2, 8, 4, 9], fee = 2
+输出: 8
+解释: 能够达到的最大利润:  
+在此处买入 prices[0] = 1
+在此处卖出 prices[3] = 8
+在此处买入 prices[4] = 4
+在此处卖出 prices[5] = 9
+总利润: ((8 - 1) - 2) + ((9 - 4) - 2) = 8.
+```
+注意:
+
+-   0 < prices.length <= 50000.
+-   0 < prices[i] < 50000.
+-   0 <= fee < 50000.
+
+## 方法:动态规划
+该dp使用了两个数字，cash和hold。解释如下：
+
+cash 该天结束手里没有股票的情况下，已经获得的最大收益
+hold 该天结束手里有股票的情况下，已经获得的最大收益
+所以转移状态分析如下：
+
+cash 更新的策略是：既然今天结束之后手里没有股票，那么可能是今天没买（保持昨天的状态），也可能是今天把股票卖出了
+
+hold 更新的策略是：今天今天结束之后手里有股票，那么可能是今天没卖（保持昨天的状态），也可能是今天买了股票
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int], fee: int) -> int:
+        cash = 0
+        hold = -prices[0]
+        for i in range(1,len(prices)):
+            #没操作,保持昨天的状态；今天卖出股票
+            cash = max(cash, hold+prices[i]-fee) 
+            # 没操作,保持昨天的状态；今天买了股票
+            hold = max(hold, cash-prices[i])
+        return cash
+```
 
 # 参考
 -   [【LeetCode】120. Triangle 解题报告（Python）](https://blog.csdn.net/fuxuemingzhu/article/details/82883187)

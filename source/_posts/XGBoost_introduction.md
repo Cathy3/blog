@@ -20,6 +20,7 @@ mathjax: true
 -    sklearn参数
 
 <!-- more -->
+目前来说，gradient boosting是对表格数据进行预测的最有力的方法。而XGBoost方法(eXtreme Gradient Boosting)是gradient boosting的最快实现。
 
 2014年，陈天奇博士提出了XGBoost算法，它可认为是在GBDT算法基础上的进一步优化。首先，XGBoost算法在基学习器损失函数中引入了正则项，控制减少训练过程当中的过拟合；其次，XGBoost算法不仅使用一阶导数计算伪残差，还计算二阶导数可近似快速剪枝的构建新的基学习器；此外，XGBoost算法还做了很多工程上的优化，例如支持并行计算、提高计算效率、处理稀疏训练数据等等。
 

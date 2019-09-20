@@ -25,7 +25,12 @@ mathjax: true
     -   [leetcode 51. N皇后](https://leetcode-cn.com/problems/n-queens/)
     -   [leetcode 52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
 -   利用回溯算法求解 0-1 背包问题
--   [Leetcode 78. 子集](https://leetcode-cn.com/problems/subsets/)
+
+数组中找所有可能的子集（幂集）
+
+-   78. 子集    （数组中不含重复元素）
+-   90. 子集 II （数组中可能含重复元素）
+
 -   [Leetcode 17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 -   79. 单词搜索
 
@@ -98,7 +103,9 @@ prettyprint(random.choice(list(queens(8))))
 #. . . . X . . . 
 ```
 
-# Leetcode 78. 子集
+# 78. 子集
+[Leetcode 78. 子集](https://leetcode-cn.com/problems/subsets/)
+
 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
 
 说明：解集不能包含重复的子集。
@@ -146,13 +153,10 @@ class Solution:
 ```
 ## 方法：组合，非递归
 
-① 最外层循环逐一从 nums 数组中取出每个元素 num
-
-② 内层循环从原来的结果集中取出每个中间结果集，并向每个中间结果集中添加该 num 元素
-
-③往每个中间结果集中加入 num
-
-④将新的中间结果集加入结果集中
+1.  最外层循环：逐一从 nums 数组中取出每个元素 num
+2.  内层循环：从原来的结果res集中取出每个中间结果集
+    1.  往每个中间结果集中加入 num
+    2.  将新的中间结果集加入结果集中
 
 ```python
 class Solution:
@@ -166,6 +170,44 @@ class Solution:
         return res
 ```
 相比前一种方法，这个更快
+
+# 90. 子集 II
+给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+
+说明：解集不能包含重复的子集。
+
+示例:
+```
+输入: [1,2,2]
+输出:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+```
+## 方法：递归，dfs
+与上面78题的解法应该大体是一样的。我们在进行循环的时候加入一个判断，即新加入的元素是否和刚刚加入的元素相同，如果相同就不加入了。这样就可以屏蔽掉了重复元素的问题。
+```python
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+        
+        def dfs(nums, index, path, res):
+            if path not in res:
+                res.append(path)
+            for i in range(index, len(nums)):
+                if i>index and nums[i]==nums[i-1]:
+                    continue
+                dfs(nums, i+1, path+[nums[i]], res)
+        dfs(nums,0,[],res)
+        return res
+```
+
 
 # Leetcode 17. 电话号码的字母组合
 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
