@@ -10,6 +10,7 @@ tags:
         -   字符串
 mathjax: true
 ---
+-   3. 无重复字符的最长子串
 -   5. 最长回文子串
 -   14. 最长公共前缀
 -   38. 报数
@@ -21,6 +22,56 @@ mathjax: true
 -   383. 赎金信
 
 <!-- more -->
+
+# 3. 无重复字符的最长子串
+给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+
+示例 1:
+```
+输入: "abcabcbb"
+输出: 3 
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+```
+示例 2:
+```
+输入: "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+```
+示例 3:
+```
+输入: "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+```
+
+## 方法：双指针, sliding window
+[left, right]双闭区间来保存子串的左右区间，对应着这个区间我们维护一个set，这个set里面全部是不重复的字符。
+
+使用while循环，如果right字符不在set中，就让它进去；如果right在，就把left对应的字符给remove出去。
+
+所以，当我们得到一个right位置的字符时，通过移动left和修改[left,right]区间内对应的的set，来保持了一个最小的不重复字符区间。这里需要注意的是，移动left的次数不一定就是1次，因为我们要保证left和right之间没有重复字符，而新添加的right字符出现的位置不一定刚刚就是left指向的位置。
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        l = len(s)
+        left, right = 0, 0 
+        chars = set()
+        res = 0
+        while left < l and right < l:
+            if s[right] not in chars:
+                chars.add(s[right])
+                right += 1
+                res = max(res, len(chars))
+            else:
+                if s[left] in chars:
+                    chars.remove(s[left])
+                left += 1
+        return res
+```
+
 
 # 5. 最长回文子串
 [最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
@@ -188,6 +239,60 @@ class Solution:
         return res                       
 ```
 
+# 39. 组合总和
+给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的数字可以无限制重复被选取。
+
+说明：
+
+1.  所有数字（包括 target）都是正整数。
+2.  解集不能包含重复的组合。 
+
+示例 1:
+```
+输入: candidates = [2,3,6,7], target = 7,
+所求解集为:
+[
+  [7],
+  [2,2,3]
+]
+```
+示例 2:
+```
+输入: candidates = [2,3,5], target = 8,
+所求解集为:
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+```
+## 方法：dfs
+使用候选集的数字，能有多少种不同的组合，使得每个组合的和都是target。
+
+dfs搜索，先对所有的值进行排序，然后对每个元素进行dfs搜索，判断能否得到target。用了几个条件判断进行提前终止，这样能加速。
+
+```python
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        candidates.sort()
+        self.dfs(candidates, target, 0, res, [])
+        return res
+    
+    def dfs(self, nums, target, index, res, path):
+        if target < 0:
+            return 
+        elif target == 0:
+            res.append(path)
+            return
+        for i in range(index, len(nums)):
+            if nums[index] > target:
+                return
+            self.dfs(nums, target-nums[i], i, res, path+[nums[i]])
+```
+
 # 43. 字符串相乘
 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
 
@@ -230,6 +335,37 @@ class Solution:
         while st < len(res) - 1 and res[st] == 0:  # 统计前面有几个0
             st += 1
         return ''.join(map(str, res[st:]))  # 去掉0，变成字符串
+```
+
+# 49. 字母异位词分组
+给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+
+示例:
+```
+输入: ["eat", "tea", "tan", "ate", "nat", "bat"],
+输出:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+```
+说明：
+
+-   所有输入均为小写字母。
+-   不考虑答案输出的顺序。
+
+## 方法：字典
+```python
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        res = {}
+        for item in strs:
+            k = ''.join(sorted(item))
+            if k not in res:
+                res[k] = []
+            res[k].append(item) # 相同字符串放到同一个字典k中
+        return [res[x] for x in res]
 ```
 
 # 58. 最后一个单词的长度
