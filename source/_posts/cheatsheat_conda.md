@@ -81,8 +81,7 @@ conda update --all
 conda create --name flask_app # 创建新的虚拟环境，名为flask_app
 source activate flask_app # 进入这个虚拟环境（linux环境下）
 conda install -c anaconda flask # 安装 flask 包
-deactivate #推出环境
+deactivate #退出环境
 ```
-
-
-
+-	安装好之后，可新建 Flask 项目。
+-	[Flask 快速入门](http://docs.jinkan.org/docs/flask/quickstart.html#quickstart)
