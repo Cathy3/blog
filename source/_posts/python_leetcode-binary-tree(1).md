@@ -30,6 +30,7 @@ mathjax: true
 -   98. 验证二叉搜索树
 -   103. 二叉树的锯齿形层次遍历
 -   114. 二叉树展开为链表
+-   101. 对称二叉树 （一个二叉树是否对称）
 -   226. 翻转二叉树
  
 <!-- more -->
@@ -930,6 +931,48 @@ class Solution:
         res.append(root)
         self.preOrder(root.left, res)
         self.preOrder(root.right, res)
+```
+# 对称二叉树
+给定一个二叉树，检查它是否是镜像对称的。
+
+例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+```
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+```
+但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+```
+    1
+   / \
+  2   2
+   \   \
+   3    3
+```
+
+## 方法一：DFS
+一个二叉树遍历的过程中不一定一定只有一个参数，也可以同时传了两个参数分别是左右好处是可以直接比较，当然这个时候需要把root放到两个参数上进行比较。
+
+递归很重要的一部分是终止条件的确定。
+
+```python
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        if not root:
+            return True
+        return self.isMirror(root.left, root.right)
+    
+    def isMirror(self, left, right):
+        if not left and not right:
+            return True
+        if not left or not right:
+            return False
+        if left.val != right.val:
+            return False
+        
+        return self.isMirror(left.left, right.right) and self.isMirror(left.right, right.left)
 ```
 
 # 翻转二叉树
