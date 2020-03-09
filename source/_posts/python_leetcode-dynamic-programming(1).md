@@ -35,9 +35,6 @@ mathjax: true
 -   213. 打家劫舍 II
 -   337. 打家劫舍 III
 
--   309. 最佳买卖股票时机含冷冻期
--   714. 买卖股票的最佳时机含手续费
-
 
 
 <!-- more -->
@@ -455,109 +452,9 @@ class Solution:
 ```
 
 
-# 309. 最佳买卖股票时机含冷冻期
-给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
 
-设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
 
--   你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
--   卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
 
-示例:
-```
-输入: [1,2,3,0,2]
-输出: 3 
-解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
-```
-## 方法
-这个题和 714题 比较像。做题方法都是使用了两个数组：
-
-1.  sell 该天结束手里没有股票的情况下，已经获得的最大收益
-    -   sell[i]代表的是手里没有股票的收益，这种可能性是今天卖了或者啥也没干。
-    -   max(昨天手里有股票的收益+今天卖股票的收益，昨天手里没有股票的收益)， 即 `max(sell[i - 1], hold[i - 1] + prices[i])`；
-2.  hold 该天结束手里有股票的情况下，已经获得的最大收益
-    -   hold[i]代表的是手里有股票的收益，这种可能性是今天买了股票或者啥也没干，今天买股票必须昨天休息。
-    -   max(今天买股票是前天卖掉股票的收益-今天股票的价格，昨天手里有股票的收益）。即 `max(hold[i - 1], sell[i - 2] - prices[i])`。
-
-另外需要注意的是，题目说的是昨天卖了股票的话今天不能买，对于开始的第一天，不可能有卖股票的行为，所以需要做个判断。
-
-该算法的时间复杂度是O(n)，空间复杂度是O(n)。
-
-```python
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        if not prices: return 0
-        sell = [0] * len(prices) #没有股票的收益
-        hold = [0] * len(prices) #持有股票的收益
-        hold[0] = -prices[0] #第一天
-        for i in range(1, len(prices)):
-            sell[i] = max(sell[i-1], hold[i-1] + prices[i])
-            hold[i] = max(hold[i-1], (sell[i-2] if i>=2 else 0) - prices[i])
-        return sell[-1]
-```
-如果使用O(1)的空间复杂度，那么就可以写成下面这样：
-```python
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        if not prices: return 0
-        prev_sell = 0
-        curr_sell = 0
-        hold = -prices[0]
-        for i in range(1, len(prices)):
-            temp = curr_sell
-            curr_sell = max(curr_sell, hold + prices[i])
-            hold = max(hold, (prev_sell if i >= 2 else 0) - prices[i])
-            prev_sell = temp
-        return curr_sell
-```
-
-# 714. 买卖股票的最佳时机含手续费
-给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
-
-你可以无限次地完成交易，但是你每次交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
-
-返回获得利润的最大值。
-
-示例 1:
-```
-输入: prices = [1, 3, 2, 8, 4, 9], fee = 2
-输出: 8
-解释: 能够达到的最大利润:  
-在此处买入 prices[0] = 1
-在此处卖出 prices[3] = 8
-在此处买入 prices[4] = 4
-在此处卖出 prices[5] = 9
-总利润: ((8 - 1) - 2) + ((9 - 4) - 2) = 8.
-```
-注意:
-
--   0 < prices.length <= 50000.
--   0 < prices[i] < 50000.
--   0 <= fee < 50000.
-
-## 方法:动态规划
-该dp使用了两个数字，cash和hold。解释如下：
-
-cash 该天结束手里没有股票的情况下，已经获得的最大收益
-hold 该天结束手里有股票的情况下，已经获得的最大收益
-所以转移状态分析如下：
-
-cash 更新的策略是：既然今天结束之后手里没有股票，那么可能是今天没买（保持昨天的状态），也可能是今天把股票卖出了
-
-hold 更新的策略是：今天今天结束之后手里有股票，那么可能是今天没卖（保持昨天的状态），也可能是今天买了股票
-
-```python
-class Solution:
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        cash = 0
-        hold = -prices[0]
-        for i in range(1,len(prices)):
-            #没操作,保持昨天的状态；今天卖出股票
-            cash = max(cash, hold+prices[i]-fee) 
-            # 没操作,保持昨天的状态；今天买了股票
-            hold = max(hold, cash-prices[i])
-        return cash
-```
 
 # 参考
 -   [【LeetCode】120. Triangle 解题报告（Python）](https://blog.csdn.net/fuxuemingzhu/article/details/82883187)

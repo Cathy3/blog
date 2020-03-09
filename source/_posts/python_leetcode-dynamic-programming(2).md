@@ -28,11 +28,16 @@ tags:
     -   [718. 最长重复子数组](https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/)
 -   [10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
 -   序列中找到一个和最大的连续子数组
-    -   53. 最大子序和
+    -   [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
 -   序列中找到一个乘积最大的连续子数组
     -   [152. 乘积最大子序列](https://leetcode-cn.com/problems/maximum-product-subarray/)
 -   序列中找到一个递增最长的子数组的长度
     -   [300. 最长上升子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
+
+-   121. 买卖股票的最佳时机
+-   122. 买卖股票的最佳时机 II
+-   309. 最佳买卖股票时机含冷冻期
+-   714. 买卖股票的最佳时机含手续费
 
 -   91. 解码方法
 -   ❓279. 完全平方数
@@ -560,6 +565,224 @@ class Solution:
                     dp[i] = max(dp[i], dp[j]+1)
         return max(dp)
 ```
+
+# 121. 买卖股票的最佳时机
+[Best Time to Buy and Sell Stock](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+
+## 题目描述
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+如果你最多只允许完成一笔交易（即买入和卖出一支股票），设计一个算法来计算你所能获取的最大利润。
+
+注意你不能在买入股票前卖出股票。
+
+**示例 1:**
+```
+输入: [7,1,5,3,6,4]
+输出: 5
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格。
+```
+**示例 2:**
+```
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+```
+
+## 方法一：遍历
+根据题意，我们只需要找出数组中最大的差值即可，即 `max(prices[j] – prices[i]) ，i < j` 。
+如何得到最大的差值，只需要一次遍历即可，在遍历的用一个变量记录遍历到当前时的最小值即可。时间复杂度为 `O(n)`.
+```python
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        if prices is None or len(prices)<2:
+            return 0
+        
+        buy = prices[0] # 买入
+        profit = 0 # 利润
+        
+        for i in range(1,len(prices)):
+            if prices[i] < buy:
+                buy = prices[i]
+            else:
+                if prices[i] - buy > profit:
+                    profit = prices[i] - buy
+        return profit
+```
+
+## 方法二：Kadane's algorithm
+- 方法同上面的53题-求数组中和最大的连续子数组序列。
+- 如何转化为求数组中的和最大的连续子序列？相邻两个数作差即可，这样的话子序列的和就是我们在子序列开始卖出股票，在子序列最后买回股票所能得到的收益。
+```python
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        
+        max_so_far = max_ending_here = 0
+        
+        for i in range(1, len(prices)):
+            max_ending_here = max(0, max_ending_here + prices[i] - prices[i-1])
+            max_so_far = max(max_so_far, max_ending_here)
+        return max_so_far
+```
+测试结果比前一个方法慢
+
+# 122. 买卖股票的最佳时机 II
+[Best Time to Buy and Sell Stock II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
+
+## 题目描述
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+**示例 1:**
+
+输入: [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+**示例 2:**
+
+输入: [1,2,3,4,5]
+输出: 4
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+**示例 3:**
+
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+## 方法：遍历
+如果后面的股价比前面的大，我们就买卖
+```python
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        return sum(max(prices[i+1]-prices[i], 0) for i in range(len(prices)-1))
+```
+
+# 309. 最佳买卖股票时机含冷冻期
+给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
+
+设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+
+-   你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+-   卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
+
+示例:
+```
+输入: [1,2,3,0,2]
+输出: 3 
+解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
+```
+## 方法
+这个题和 714题 比较像。做题方法都是使用了两个数组：
+
+1.  sell 该天结束手里没有股票的情况下，已经获得的最大收益
+    -   sell[i]代表的是手里没有股票的收益，这种可能性是今天卖了或者啥也没干。
+    -   max(昨天手里有股票的收益+今天卖股票的收益，昨天手里没有股票的收益)， 即 `max(sell[i - 1], hold[i - 1] + prices[i])`；
+2.  hold 该天结束手里有股票的情况下，已经获得的最大收益
+    -   hold[i]代表的是手里有股票的收益，这种可能性是今天买了股票或者啥也没干，今天买股票必须昨天休息。
+    -   max(今天买股票是前天卖掉股票的收益-今天股票的价格，昨天手里有股票的收益）。即 `max(hold[i - 1], sell[i - 2] - prices[i])`。
+
+另外需要注意的是，题目说的是昨天卖了股票的话今天不能买，对于开始的第一天，不可能有卖股票的行为，所以需要做个判断。
+
+该算法的时间复杂度是O(n)，空间复杂度是O(n)。
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices: return 0
+        sell = [0] * len(prices) #没有股票的收益
+        hold = [0] * len(prices) #持有股票的收益
+        hold[0] = -prices[0] #第一天
+        for i in range(1, len(prices)):
+            sell[i] = max(sell[i-1], hold[i-1] + prices[i])
+            hold[i] = max(hold[i-1], (sell[i-2] if i>=2 else 0) - prices[i])
+        return sell[-1]
+```
+如果使用O(1)的空间复杂度，那么就可以写成下面这样：
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices: return 0
+        prev_sell = 0
+        curr_sell = 0
+        hold = -prices[0]
+        for i in range(1, len(prices)):
+            temp = curr_sell
+            curr_sell = max(curr_sell, hold + prices[i])
+            hold = max(hold, (prev_sell if i >= 2 else 0) - prices[i])
+            prev_sell = temp
+        return curr_sell
+```
+
+# 714. 买卖股票的最佳时机含手续费
+给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
+
+你可以无限次地完成交易，但是你每次交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
+
+返回获得利润的最大值。
+
+示例 1:
+```
+输入: prices = [1, 3, 2, 8, 4, 9], fee = 2
+输出: 8
+解释: 能够达到的最大利润:  
+在此处买入 prices[0] = 1
+在此处卖出 prices[3] = 8
+在此处买入 prices[4] = 4
+在此处卖出 prices[5] = 9
+总利润: ((8 - 1) - 2) + ((9 - 4) - 2) = 8.
+```
+注意:
+
+-   0 < prices.length <= 50000.
+-   0 < prices[i] < 50000.
+-   0 <= fee < 50000.
+
+## 方法:动态规划
+该dp使用了两个数字，cash和hold。解释如下：
+
+cash 该天结束手里没有股票的情况下，已经获得的最大收益
+hold 该天结束手里有股票的情况下，已经获得的最大收益
+所以转移状态分析如下：
+
+cash 更新的策略是：既然今天结束之后手里没有股票，那么可能是今天没买（保持昨天的状态），也可能是今天把股票卖出了
+
+hold 更新的策略是：今天今天结束之后手里有股票，那么可能是今天没卖（保持昨天的状态），也可能是今天买了股票
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int], fee: int) -> int:
+        cash = 0
+        hold = -prices[0]
+        for i in range(1,len(prices)):
+            #没操作,保持昨天的状态；今天卖出股票
+            cash = max(cash, hold+prices[i]-fee) 
+            # 没操作,保持昨天的状态；今天买了股票
+            hold = max(hold, cash-prices[i])
+        return cash
+```
+
+
 
 # 91. 解码方法
 一条包含字母 A-Z 的消息通过以下方式进行了编码：

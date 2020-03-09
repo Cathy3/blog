@@ -48,14 +48,22 @@ deactivate
 conda create --name new_env_name --clone old_env_name 
 ```
 <!-- more -->
+
 # Conda包管理
-```
-# 安装xxxx
+
+安装xxxx
+
+```python
 conda install xxxx
+```
 
-# 查看当前环境下已安装的包
+查看当前环境下已安装的包
+
+```python
 conda list
+```
 
+```
 # 查看某个指定环境的已安装包
 conda list -n python34
 
@@ -68,20 +76,32 @@ conda install -n python34 numpy
 
 # 加一个-c表示从http://anaconda.org下载资源包
 conda install -c spyder-ide spyder=3.0.0
+```
 
-# 更新所有库
+更新所有库
+
+```python
 conda update --all
 ```
+
 [cheat-sheet下载](https://conda.io/docs/_downloads/conda-cheatsheet.pdf)
 
 ## 安装指定包
 
+安装requirement.txt指定的依赖包
+
+```python
+conda install --yes --file requirements.txt
+```
+
 安装Flask
+
 ```python
 conda create --name flask_app # 创建新的虚拟环境，名为flask_app
 source activate flask_app # 进入这个虚拟环境（linux环境下）
 conda install -c anaconda flask # 安装 flask 包
 deactivate #退出环境
 ```
+
 -	安装好之后，可新建 Flask 项目。
 -	[Flask 快速入门](http://docs.jinkan.org/docs/flask/quickstart.html#quickstart)
